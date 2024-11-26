@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-as=k2on$_)t@6r6fl%hgw!g%j9knm)8@tpzz(x@$*q*%nh#=b$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['shop-result224.app', 'localhost','127.0.0.1']
 
 
 # Application definition
