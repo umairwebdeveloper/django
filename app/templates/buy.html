@@ -1,92 +1,167 @@
-{% extends 'base.html' %} {% block title %}Works | Keysavvy{% endblock %} {% block content %}
+{% extends 'base.html' %} {% block title %}Buy | Keysavvy{% endblock %}
+<!-- gap -->
+{% block content %}
 <section class="text-white py-3" style="{{header_color}}">
 	<div class="container py-5">
 		<h1
 			class="display-3 mb-3 title text-shadow-none"
 			style="font-weight: 400"
 		>
-			How does KeySavvy work?
+			The safest way to pay a private seller
 		</h1>
 		<p class="lead mb-4 text-shadow-none">
-			The safest way to accept payment for any vehicle on any marketplace.
+			KeySavvy protects you from title fraud while making it easy to pay a private seller.
 		</p>
 	</div>
 </section>
-<section class="buy-sell-tabs py-5">
+<section class="vin-section py-5">
 	<div class="container">
+		<div class="row">
+			<div class="col-md-4">
+				<p>Search KeySavvy for the vehicle you're buying:</p>
+				<input type="text" class="form-control" placeholder="VIN" />
+			</div>
+
+			<div class="col-md-4">
+				<p class="fs-5 fw-bold text-center mt-4">OR</p>
+			</div>
+
+			<div class="col-md-4">
+				<p>Sign up and share KeySavvy with your seller:</p>
+				<a href="{% url 'auth' %}" class="btn btn-custom w-100">SIGN UP</a>
+			</div>
+		</div>
+	</div>
+</section>
+<section class="how-it-works py-5">
+	<div class="container text-center">
+		<div class="row justify-content-center">
+			<!-- Card 1 -->
+			<div class="col-12 col-md-6 col-lg-4 mb-4">
+				<div class="card shadow border-0 h-100">
+					<div class="card-body">
+						<div class="mb-3">
+							<img
+								src="/static/images/payment.png"
+								alt="Pay Online"
+								class="img-fluid"
+								style="height: 100px"
+							/>
+						</div>
+						<h5 class="fw-bold">Payment Protection</h5>
+						<p class="text-muted">
+							You're guaranteed to receive a clear title.
+						</p>
+					</div>
+				</div>
+			</div>
+			<!-- Card 2 -->
+			<div class="col-12 col-md-6 col-lg-4 mb-4">
+				<div class="card shadow border-0 h-100">
+					<div class="card-body">
+						<div class="mb-3">
+							<img
+								src="/static/images/security-protect.png"
+								alt="Scam Protection"
+								class="img-fluid"
+								style="height: 100px"
+							/>
+						</div>
+						<h5 class="fw-bold">Identity Protection</h5>
+						<p class="text-muted">
+							Know the seller is who they claim and avoid buying a
+							stolen car that you can't register.
+						</p>
+					</div>
+				</div>
+			</div>
+			<!-- Card 3 -->
+			<div class="col-12 col-md-6 col-lg-4 mb-4">
+				<div class="card shadow border-0 h-100">
+					<div class="card-body">
+						<div class="mb-3">
+							<img
+								src="/static/images/document.png"
+								alt="Help With Paperwork"
+								class="img-fluid"
+								style="height: 100px"
+							/>
+						</div>
+						<h5 class="fw-bold">Loan Protection</h5>
+						<p class="text-muted">
+							Determine if your seller has an undisclosed loan or
+							lien before you pay.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section
+	class="supported-section"
+	style="
+		background-image: url('/static/images/laptop-girl.webp');
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: 77% 43%;
+		height: 600px;
+	"
+>
+	<div class="container mt-3">
+		<h2 class="text-center mb-4">Pay online. No trips to your bank.</h2>
+		<div
+			class="shadow p-4 rounded-3"
+			style="max-width: 200px; background: #fff; opacity: 0.78"
+		>
+			<div class="d-flex flex-column justify-content-center gap-4 p-3">
+				<div>
+					<p
+						class="text-center p-0 m-0 fw-bold"
+						style="color: #1a2b63"
+					>
+						Bank Account <br />(ACH)
+					</p>
+				</div>
+				<div>
+					<p
+						class="text-center p-0 m-0 fw-bold"
+						style="color: #1a2b63"
+					>
+						Wire Transfer
+					</p>
+				</div>
+				<img
+					src="/static/images/bank1.png"
+					alt="logo"
+					class="img-fluid"
+					style="height: 40px"
+				/>
+				<img
+					src="/static/images/bank2.png"
+					alt="logo"
+					class="img-fluid"
+					style="height: 40px"
+				/>
+				<img
+					src="/static/images/bank3.png"
+					alt="logo"
+					class="img-fluid"
+					style="height: 40px"
+				/>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="buy-sell-tabs pt-5">
+	<div class="container">
+		<h3 class="text-center mb-5">How does it work?</h3>
 		<div class="row justify-content-center">
 			<div class="col-md-6">
-				<!-- Tabs -->
-				<div class="d-flex justify-content-center mb-4">
-					<button
-						class="btn bg-light tab-button active"
-						data-target="selling-content"
-					>
-						I'M SELLING
-					</button>
-					<button
-						class="btn bg-light tab-button"
-						data-target="buying-content"
-					>
-						I'M BUYING
-					</button>
-				</div>
-
-				<!-- Selling Content -->
-				<div id="selling-content" class="tab-content">
-					<div class="row align-items-center mb-4">
-						<div class="col-md-3">
-							<div class="step-number mb-2">1</div>
-						</div>
-						<div class="col-md-9">
-							<h5 class="fw-bold">Add your car to KeySavvy</h5>
-							<p>
-								When you add your car to KeySavvy, we'll give
-								you a link that buyers can use to pay you
-								online.
-							</p>
-						</div>
-					</div>
-					<div
-						class="row flex-md-row flex-column-reverse align-items-center mb-4"
-					>
-						<div class="col-md-9">
-							<h5 class="fw-bold">Share your KeySavvy link</h5>
-							<p>
-								Share your KeySavvy link with your buyer or list
-								your car for sale wherever you like. Include
-								your link or QR code image in your ad to deter
-								scammers.
-							</p>
-						</div>
-						<div class="col-md-3 text-center mb-2">
-							<div class="step-number">2</div>
-						</div>
-					</div>
-					<div class="row align-items-center mb-4">
-						<div class="col-md-3 mb-2">
-							<div class="step-number">3</div>
-						</div>
-						<div class="col-md-9">
-							<h5 class="fw-bold">
-								Ask your buyer to pay online
-							</h5>
-							<p>
-								There's no need to handle cash or verify a
-								cashier's check. Buyers can use your payment
-								link to pay online using their bank account and
-								you'll get an email when it's ok to hand over
-								the keys.
-							</p>
-						</div>
-					</div>
-					<div class="text-center">
-						<button class="btn btn-warning">Start Selling</button>
-					</div>
-				</div>
-
 				<!-- Buying Content -->
-				<div id="buying-content" class="tab-content d-none">
+				<div id="buying-content" class="tab-content">
 					<div class="row align-items-center mb-4">
 						<div class="col-md-3 mb-2">
 							<div class="step-number">1</div>
@@ -133,134 +208,28 @@
 							</p>
 						</div>
 					</div>
-					<div class="text-center">
-						<button class="btn btn-warning">Pay a Seller</button>
-					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </section>
-<section class="faq pb-5">
+
+<section class="testimonials">
+	<div class="container mt-5">
+		<h2 class="text-center">Customers love us</h2>
+		<div id="testimonial-container" class="my-4 row justify-content-center mx-2"></div>
+		<nav>
+			<ul
+				id="testimonial-pagination"
+				class="pagination justify-content-center"
+			></ul>
+		</nav>
+	</div>
+</section>
+<section class="faq py-5">
 	<div class="container">
 		<h2 class="text-center mb-4">Frequently Asked Questions</h2>
-		<div class="accordion custom-accordion" id="faqAccordion">
-			<div class="accordion-item">
-				<h2 class="accordion-header">
-					<button
-						class="accordion-button"
-						type="button"
-						data-bs-toggle="collapse"
-						data-bs-target="#collapseOne"
-						aria-expanded="true"
-						aria-controls="collapseOne"
-					>
-						Accordion Item #1
-					</button>
-				</h2>
-				<div
-					id="collapseOne"
-					class="accordion-collapse collapse show"
-					data-bs-parent="#faqAccordion"
-				>
-					<div class="accordion-body">
-						<strong
-							>This is the first item's accordion body.</strong
-						>
-						It is shown by default, until the collapse plugin adds
-						the appropriate classes that we use to style each
-						element. These classes control the overall appearance,
-						as well as the showing and hiding via CSS transitions.
-						You can modify any of this with custom CSS or overriding
-						our default variables. It's also worth noting that just
-						about any HTML can go within the
-						<code>.accordion-body</code>, though the transition does
-						limit overflow.
-					</div>
-				</div>
-			</div>
-			<div class="accordion-item">
-				<h2 class="accordion-header">
-					<button
-						class="accordion-button collapsed"
-						type="button"
-						data-bs-toggle="collapse"
-						data-bs-target="#collapseTwo"
-						aria-expanded="false"
-						aria-controls="collapseTwo"
-					>
-						Accordion Item #2
-					</button>
-				</h2>
-				<div
-					id="collapseTwo"
-					class="accordion-collapse collapse"
-					data-bs-parent="#faqAccordion"
-				>
-					<div class="accordion-body">
-						<strong
-							>This is the second item's accordion body.</strong
-						>
-						It is hidden by default, until the collapse plugin adds
-						the appropriate classes that we use to style each
-						element. These classes control the overall appearance,
-						as well as the showing and hiding via CSS transitions.
-						You can modify any of this with custom CSS or overriding
-						our default variables. It's also worth noting that just
-						about any HTML can go within the
-						<code>.accordion-body</code>, though the transition does
-						limit overflow.
-					</div>
-				</div>
-			</div>
-			<div class="accordion-item">
-				<h2 class="accordion-header">
-					<button
-						class="accordion-button collapsed"
-						type="button"
-						data-bs-toggle="collapse"
-						data-bs-target="#collapseThree"
-						aria-expanded="false"
-						aria-controls="collapseThree"
-					>
-						Accordion Item #3
-					</button>
-				</h2>
-				<div
-					id="collapseThree"
-					class="accordion-collapse collapse"
-					data-bs-parent="#faqAccordion"
-				>
-					<div class="accordion-body">
-						<strong
-							>This is the third item's accordion body.</strong
-						>
-						It is hidden by default, until the collapse plugin adds
-						the appropriate classes that we use to style each
-						element. These classes control the overall appearance,
-						as well as the showing and hiding via CSS transitions.
-						You can modify any of this with custom CSS or overriding
-						our default variables. It's also worth noting that just
-						about any HTML can go within the
-						<code>.accordion-body</code>, though the transition does
-						limit overflow.
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
-<section
-	class="questions-section py-5 text-white"
-	style="background-color: #1a5063"
->
-	<div class="container">
-		<h2 class="fs-1 mb-3">More questions?</h2>
-		<p class="mb-4">
-			We're happy to answer them. Click the button below to send the team
-			a message.
-		</p>
-		<a href="#" class="btn btn-outline-warning btn-lg">Chat With Us</a>
+		{% include "components/faqs.html" with comp_faq_data=faq_data comp_faq_number="1" %}
 	</div>
 </section>
 {% endblock %}

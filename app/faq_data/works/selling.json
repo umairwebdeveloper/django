@@ -1,0 +1,42 @@
+[
+	{
+		"question": "Can I use KeySavvy if I still have a loan?",
+		"answer": "Yes! You don't need to pay off your loan before you sell your car -- KeySavvy will pay it off as part of the sale process. We charge sellers a $99 fee when there is a loan or lien on a vehicle. How to sell a financed car with KeySavvy"
+	},
+	{
+		"question": "When do sellers get paid?",
+		"answer": "After we verify and approve a sale, we'll send the seller an email letting them know it's OK to give the vehicle to the buyer. If the seller has a loan and doesn't have their title, we'll initiate their payment and a payment to their lienholder when the buyer or their shipper pick up the vehicle. If the seller has their title, we'll provide a state-specific guide for signing and mailing it to KeySavvy. We'll initiate their payout when we receive the title and the buyer or their shipper pick up the vehicle. We need to receive the title to verify it doesn't have any errors or omissions that would prevent the buyer from registering the vehicle. If we find any issues, we work with sellers to help resolve them. We guarantee sellers get paid, but we also guarantee buyers get a clear title and this is an important part of our process. Some sellers choose to mail their title in advance, before handing over the keys, but it isn't required. The sale is final when the buyer or their shipper pick up the vehicle, whether or not we've received the title."
+	},
+	{
+		"question": "How do I get paid when my car sells?",
+		"answer": "When your buyer pays with KeySavvy, we can send payment by direct deposit (ACH), check, and in some cases, Zelle. You can choose how you'd like to be paid on your account page. The person receiving the payment must be a legal owner of the vehicle."
+	},
+	{
+		"question": "Do you share any of my personal information?",
+		"answer": "No, KeySavvy does not share personal information with buyers except for the seller's first name. If you have a loan, your payoff amount is also not shared with buyers. However, when you complete the sale, your buyer will be able to see the name and address listed on your title and bill of sale."
+	},
+	{
+		"question": "Can I sell another person's car?",
+		"answer": "Yes, you can help another person sell their car with KeySavvy. We do require all legal owners to verify their identity and e-sign the sale documents, and we can only send the seller's payment to a legal owner of the vehicle."
+	},
+	{
+		"question": "Can I set my own price?",
+		"answer": "Yes, you control the sale price of your vehicle. KeySavvy is not involved in the price negotiation between you and your buyer. Since we process transactions as a dealer, vehicles with a sale price significantly below fair market value may not be approved."
+	},
+	{
+		"question": "When do I give my car to the buyer?",
+		"answer": "After KeySavvy verifies your buyer's payment and approves a sale, we'll send you an email letting you know it's OK to give your vehicle to the buyer. Don't give your vehicle to the buyer until we've verified your buyer's payment. After we approve, you and the buyer can determine when and where to meet to hand over your keys or arrange vehicle shipping."
+	},
+	{
+		"question": "Does KeySavvy help advertise my car?",
+		"answer": "KeySavvy does not advertise your car, but sharing your KeySavvy link in your ad can help buyers feel comfortable purchasing your car. To find a buyer, you'll want to advertise your car for sale on one or more online marketplaces such as Craigslist, OfferUp, Facebook Marketplace, Cars.com, Cars & Bids, Autotrader, eBay, etc. Our blog has lots of great resources to help sellers, like marketplace reviews and guides for creating stellar ads."
+	},
+	{
+		"question": "Can I sell my car if my registration has expired?",
+		"answer": "Yes, it is legal to sell your vehicle even if the registration has expired. In some states, such as California, the DMV may require you or the buyer to pay outstanding registration fees when selling it to a buyer within the state. If selling to a buyer out of state, you generally do not need to pay unpaid registration fees when the buyer registers the vehicle."
+	},
+	{
+		"question": "Can I sell if I owe more than the sale price?",
+		"answer": "Yes. If your loan is more than the sale price of the vehicle (called \"negative equity\", \"upside-down\", or \"underwater\"), you can still sell with KeySavvy. In fact, we make it easier because you don't have to pay off your entire loan before selling your car. When you agree on a price with a buyer, we'll get a 10-day payoff quote from your lender. We'll collect the difference between the sale price and the payoff amount from you before your buyer picks up the vehicle."
+	}
+]

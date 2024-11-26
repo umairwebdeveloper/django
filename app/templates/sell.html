@@ -1,0 +1,249 @@
+{% extends 'base.html' %} {% block title %}Sell | Keysavvy{% endblock %}
+<!-- gap -->
+{% block content %}
+<section class="text-white py-3" style="{{header_color}}">
+	<div class="container py-5">
+		<h1
+			class="display-3 mb-3 title text-shadow-none"
+			style="font-weight: 400"
+		>
+			The safest way to accept payment when <br/> selling a car
+		</h1>
+		<p class="lead mb-4 text-shadow-none">
+            KeySavvy protects you from payment fraud and makes it easy to sell a car privately.
+		</p>
+	</div>
+</section>
+<section class="vin-section py-5">
+	<div class="container">
+        <p class="text-center mb-4">To get started as a seller, add your vehicle to KeySavvy. Can't find your VIN? Here are some clever places to find it.</p>
+		<div class="row justify-content-center mb-3">
+			<div class="col-md-4">
+				<input type="text" class="form-control" placeholder="Vehicle Identification Number (VIN)" />
+			</div>
+			<div class="col-md-4">
+				<button class="btn btn-custom w-100">ADD VEHICLE</button>
+			</div>
+		</div>
+        <p class="text-center">
+        <a href="#">Selling a collector, classic, or JDM vehicle?</a>
+        </p>
+	</div>
+</section>
+<section class="how-it-works py-5">
+	<div class="container text-center">
+		<div class="row justify-content-center">
+			<!-- Card 1 -->
+			<div class="col-12 col-md-6 col-lg-4 mb-4">
+				<div class="card shadow border-0 h-100">
+					<div class="card-body">
+						<div class="mb-3">
+							<img
+								src="/static/images/payment.png"
+								alt="Pay Online"
+								class="img-fluid"
+								style="height: 100px"
+							/>
+						</div>
+						<h5 class="fw-bold">Payment Protection</h5>
+						<p class="text-muted">
+							You're guaranteed to receive a clear title.
+						</p>
+					</div>
+				</div>
+			</div>
+			<!-- Card 2 -->
+			<div class="col-12 col-md-6 col-lg-4 mb-4">
+				<div class="card shadow border-0 h-100">
+					<div class="card-body">
+						<div class="mb-3">
+							<img
+								src="/static/images/security-protect.png"
+								alt="Scam Protection"
+								class="img-fluid"
+								style="height: 100px"
+							/>
+						</div>
+						<h5 class="fw-bold">Identity Protection</h5>
+						<p class="text-muted">
+							Know the seller is who they claim and avoid buying a
+							stolen car that you can't register.
+						</p>
+					</div>
+				</div>
+			</div>
+			<!-- Card 3 -->
+			<div class="col-12 col-md-6 col-lg-4 mb-4">
+				<div class="card shadow border-0 h-100">
+					<div class="card-body">
+						<div class="mb-3">
+							<img
+								src="/static/images/document.png"
+								alt="Help With Paperwork"
+								class="img-fluid"
+								style="height: 100px"
+							/>
+						</div>
+						<h5 class="fw-bold">Loan Protection</h5>
+						<p class="text-muted">
+							Determine if your seller has an undisclosed loan or
+							lien before you pay.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section
+	class="supported-section"
+	style="
+		background-image: url('/static/images/laptop-girl.webp');
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: 77% 43%;
+		height: 600px;
+	"
+>
+	<div class="container mt-3">
+		<h2 class="text-center mb-4">Pay online. No trips to your bank.</h2>
+		<div
+			class="shadow p-4 rounded-3"
+			style="max-width: 200px; background: #fff; opacity: 0.78"
+		>
+			<div class="d-flex flex-column justify-content-center gap-4 p-3">
+				<div>
+					<p
+						class="text-center p-0 m-0 fw-bold"
+						style="color: #1a2b63"
+					>
+						Bank Account <br />(ACH)
+					</p>
+				</div>
+				<div>
+					<p
+						class="text-center p-0 m-0 fw-bold"
+						style="color: #1a2b63"
+					>
+						Wire Transfer
+					</p>
+				</div>
+				<img
+					src="/static/images/bank1.png"
+					alt="logo"
+					class="img-fluid"
+					style="height: 40px"
+				/>
+				<img
+					src="/static/images/bank2.png"
+					alt="logo"
+					class="img-fluid"
+					style="height: 40px"
+				/>
+				<img
+					src="/static/images/bank3.png"
+					alt="logo"
+					class="img-fluid"
+					style="height: 40px"
+				/>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="buy-sell-tabs pt-5">
+	<div class="container">
+		<h3 class="text-center mb-5">How does it work?</h3>
+		<div class="row justify-content-center">
+			<div class="col-md-6">
+				<!-- Selling Content -->
+				<div id="selling-content" class="tab-content">
+					<div class="row align-items-center mb-4">
+						<div class="col-md-3">
+							<div class="step-number mb-2">1</div>
+						</div>
+						<div class="col-md-9">
+							<h5 class="fw-bold">Add your car to KeySavvy</h5>
+							<p>
+								When you add your car to KeySavvy, we'll give
+								you a link that buyers can use to pay you
+								online.
+							</p>
+						</div>
+					</div>
+					<div
+						class="row flex-md-row flex-column-reverse align-items-center mb-4"
+					>
+						<div class="col-md-9">
+							<h5 class="fw-bold">Share your KeySavvy link</h5>
+							<p>
+								Share your KeySavvy link with your buyer or list
+								your car for sale wherever you like. Include
+								your link or QR code image in your ad to deter
+								scammers.
+							</p>
+						</div>
+						<div class="col-md-3 text-center mb-2">
+							<div class="step-number">2</div>
+						</div>
+					</div>
+					<div class="row align-items-center mb-4">
+						<div class="col-md-3 mb-2">
+							<div class="step-number">3</div>
+						</div>
+						<div class="col-md-9">
+							<h5 class="fw-bold">
+								Ask your buyer to pay online
+							</h5>
+							<p>
+								There's no need to handle cash or verify a
+								cashier's check. Buyers can use your payment
+								link to pay online using their bank account and
+								you'll get an email when it's ok to hand over
+								the keys.
+							</p>
+						</div>
+					</div>
+					<div
+						class="row flex-md-row flex-column-reverse align-items-center mb-4"
+					>
+						<div class="col-md-9">
+							<h5 class="fw-bold">Get paid</h5>
+							<p>
+								Link a bank account and get paid via direct
+								deposit or by check. If you have your title,
+								we'll provide detailed instructions for signing
+								and mailing it to KeySavvy. If you have a loan,
+								we'll pay it off.
+							</p>
+						</div>
+						<div class="col-md-3 text-center mb-2">
+							<div class="step-number">4</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="testimonials">
+	<div class="container mt-5">
+		<h2 class="text-center">Customers love us</h2>
+		<div id="testimonial-container" class="my-4 row justify-content-center mx-2"></div>
+		<nav>
+			<ul
+				id="testimonial-pagination"
+				class="pagination justify-content-center"
+			></ul>
+		</nav>
+	</div>
+</section>
+<section class="faq py-5">
+	<div class="container">
+		<h2 class="text-center mb-4">Frequently Asked Questions</h2>
+		{% include "components/faqs.html" with comp_faq_data=faq_data comp_faq_number="1" %}
+	</div>
+</section>
+{% endblock %}

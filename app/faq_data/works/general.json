@@ -1,0 +1,54 @@
+[
+	{
+		"question": "How much does it cost to use KeySavvy?",
+		"answer": "Buyers and sellers each pay a fee of $99.If the vehicle has a loan, KeySavvy charges the seller an additional $99 to pay off the loan as part of the sale. Buyers and sellers can split fees equally, or have one party pay all fees. Our fee is paid when the transaction completes -- we never charge a cancellation fee."
+	},
+	{
+		"question": "How is the title transferred?",
+		"answer": "KeySavvy processes transactions as a dealer by buying the vehicle from the seller and selling it to the buyer. This process enables us to verify titles, issue temporary permits and access DMV data that would otherwise be inaccessible. To process the transaction as a dealer, we need to receive the title from the seller or their lienholder. If the seller has their title, we'll provide detailed instructions for signing and mailing it to KeySavvy. Upon receipt, we'll reassign it to the buyer and ship it with tracking to the buyer's mailing address. If the seller has a loan and doesn't have their title, we'll mail the seller a power of attorney form and a return envelope. This allows us to sign the title on their behalf when we receive it from the lienholder."
+	},
+	{
+		"question": "How is KeySavvy different from PayPal and other payment services?",
+		"answer": "Unlike payment apps like PayPal and Cash App, KeySavvy verifies the buyer's identity and the seller's ownership of the vehicle. We guarantee buyers receive a clear title and sellers get paid. In contrast, PayPal explicitly excludes vehicles from purchase protection. Other peer-to-peer payment services are primarily intended for smaller transactions between friends and family. They have limits that are much lower than a typical vehicle sale price. KeySavvy has no transaction limit and guides buyers and sellers through the process, including help with all the necessary paperwork and title transfer. As a licensed dealer, we have access to data that enables more thorough verification and helpful services like temporary operating permits."
+	},
+	{
+		"question": "How is KeySavvy different from Escrow.com?",
+		"answer": "Similar to escrow services like Escrow.com, KeySavvy collects payment from the buyer and pays the seller when the buyer picks up the vehicle. However, KeySavvy is specifically designed for vehicle sales. Since we're a licensed dealer, we can verify the seller's ownership to protect buyers from title fraud, work with banks to pay off the seller's loan, and issue temporary permits so it's legal to drive the vehicle immediately. KeySavvy is also able to verify most ACH payments immediately, even on nights and weekends, whereas Escrow.com only supports wire transfers for vehicle purchases."
+	},
+	{
+		"question": "How do you verify a seller's ownership?",
+		"answer": "KeySavvy uses third-party identity verification technology to confirm the seller's identity. We then use a combination of public records, seller-provided information, and DMV records to verify that the seller is the legal owner of a vehicle. We do not share the seller's personal information with the buyer, and we do not share the buyer's personal information with the seller. However, when a sale is completed, the buyer will receive the current title containing the seller's name and address."
+	},
+	{
+		"question": "How long does it take to buy or sell with KeySavvy?",
+		"answer": "After the seller adds their vehicle to KeySavvy and a buyer accepts their price, verification generally takes 15-30 minutes during business hours . If the seller has a loan, we'll contact their lender which can delay a transaction depending on the lender. Most payments are verified within 5-10 minutes, even on weekends, but can take up to one business day depending on the buyer's bank. If the sale price is greater than $50k, the buyer will be required to pay using a wire transfer. After payment is verified and both parties have e-signed the bill of sale, most transactions are approved immediately. Some sellers prefer to wait until we receive their title before giving the vehicle to the buyer, but it's not required. Tips for using KeySavvy when you're in a rush."
+	},
+	{
+		"question": "How does it work if the vehicle is shipped?",
+		"answer": "If the vehicle is being shipped, we'll pay the seller when the shipper picks it up, as long as we've already received their title. If the seller has a loan and doesn't have their title, we'll pay the lienholder and any positive equity to the seller when the vehicle is picked up. We require sellers to upload a picture or PDF of the signed bill of lading to confirm the vehicle was picked up. A bill of lading is a fairly standard document that all vehicle transporters should provide and have signed by the seller when picking up the vehicle. KeySavvy does not make any guarantees regarding the condition of the vehicle and third-party inspections are highly recommended. KeySavvy users can get 10% off an inspection with Lemon Squad ."
+	},
+	{
+		"question": "Do you create a bill of sale?",
+		"answer": "Yes, KeySavvy generates a bill of sale automatically. Buyers and sellers e-sign this document and can download it from their dashboard at any time in the future. The bill of sale will state that the vehicle is being sold in \"as is\" condition."
+	},
+	{
+		"question": "Do you provide a CARFAX or AutoCheck report?",
+		"answer": "KeySavvy verifies the identity of the buyer and seller, checks for loans and liens that would prevent the buyer from registering the vehicle, and provides a NMVTIS report. If any title brands are present, we'll disclose them to the buyer before they submit payment. Buyers can purchase additional vehicle history reports directly from CARFAX or AutoCheck."
+	},
+	{
+		"question": "Do you work in Canada or internationally?",
+		"answer": "To use KeySavvy, the vehicle must have a US title and the buyer must have a US address to receive the title. We do not accept international wire transfers (SWIFT), but most Canadian banks can send wires to our US bank. If the vehicle is being exported outside of the US, the buyer is responsible for complying with any import regulations, paying customs duties, and any other requirements."
+	},
+	{
+		"question": "Are electric vehicles eligible for the 2024 used EV tax credit?",
+		"answer": "Yes! Unlike traditional private party sales, when you buy an eligible used electric or plug-in vehicle using KeySavvy, you may qualify for a tax credit of 30% of the purchase price, up to $4,000. The vehicle must be in the list of eligible vehicles You must be a qualified buyer The purchase price must be $25,000 or less. The vehicle must not have been sold after August 16, 2022 (except to the original owner). We'll help confirm the vehicle's eligibility. Because the tax credit is partially based on your income, we cannot determine your personal eligibility. Review the IRS Used Clean Vehicle Credit website or consult a tax professional to confirm your eligibility."
+	},
+	{
+		"question": "Can KeySavvy apply the EV tax credit at point-of-sale?",
+		"answer": "Yes! Qualified buyers can apply the full EV tax credit toward the purchase of eligible electric vehicles. When you accept your seller's price on KeySavvy, you can indicate that you plan to apply for the federal used EV tax credit. How does this work? If the sale price is $25,000 and qualifies for the maximum $4,000 credit, the buyer pays $21,000 to KeySavvy, and the seller receives the full $25,000 (minus our fee). After the buyer picks up the vehicle, the IRS pays us the remaining $4,000 directly."
+	},
+	{
+		"question": "Can I buy or sell a motorcycle, truck, or RV using KeySavvy?",
+		"answer": "Yes, KeySavvy supports cars, trucks, motorcycles, trailers, RVs, snowmobiles, and ATVs! As long as the vehicle is titled or registered in the United States, we can verify the seller's identity, check for loans and liens, and allow buyers to pay online. When buyers pay with KeySavvy, we guarantee buyers will receive a clear title and sellers will get paid. We don't support buying or selling boats at this time."
+	}
+]

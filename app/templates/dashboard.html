@@ -1,0 +1,125 @@
+{% extends 'base.html' %} {% block title %}Dashboard | Keysavvy{% endblock %}
+<!-- gap -->
+{% block content %}
+<section class="dashboard-section my-3">
+	<div class="container py-5">
+		<div class="row align-items-center mb-5">
+			<div class="col-md-10">
+				<h4>Selling</h4>
+				<p class="text-muted mb-0">
+					To accept payment from a private buyer, add your vehicle.
+				</p>
+			</div>
+			<div class="col-md-2 text-end">
+				<button class="btn btn-outline-warning mt-2" data-bs-toggle="modal" data-bs-target="#addVehicleModal">ADD VEHICLE</button>
+			</div>
+		</div>
+		<div class="row align-items-center mb-4">
+			<div class="col-md-10">
+				<h4>Buying</h4>
+				<p class="text-muted mb-0">
+					You don't have any buying history yet.
+				</p>
+			</div>
+			<div class="col-md-2 text-end">
+				<a href="{% url 'buy' %}" class="btn btn-outline-warning mt-2"
+					>PAY NEW SELLER</a
+				>
+			</div>
+		</div>
+		<div class="row mt-4">
+			<div class="col-12">
+				<p class="d-flex align-items-center">
+					<i class="bi bi-share me-2"></i>
+					<span
+						>Found a car and want to pay with KeySavvy? Share this
+						link with your seller.</span
+					>
+				</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<div
+	class="modal fade"
+	id="addVehicleModal"
+	tabindex="-1"
+	aria-labelledby="addVehicleModalLabel"
+	aria-hidden="true"
+>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="addVehicleModalLabel">
+					Add a Vehicle to KeySavvy
+				</h5>
+				<button
+					type="button"
+					class="btn-close"
+					data-bs-dismiss="modal"
+					aria-label="Close"
+				></button>
+			</div>
+			<div class="modal-body">
+				<p>
+					Enter the VIN and price of the vehicle you're
+					<strong>selling</strong>. We'll give you a link to share
+					with buyers.
+				</p>
+				<p>
+					Can't find your VIN?
+					<a href="#">Here are some clever places to find it.</a>
+				</p>
+				<form>
+					<!-- VIN Input -->
+					<div class="mb-3">
+						<label for="vin" class="form-label">VIN *</label>
+						<input
+							type="text"
+							class="form-control"
+							id="vin"
+							placeholder="Enter VIN"
+						/>
+					</div>
+					<!-- Price Input -->
+					<div class="mb-3">
+						<label for="price" class="form-label"
+							>Price (optional)</label
+						>
+						<div class="input-group">
+							<span class="input-group-text">$</span>
+							<input
+								type="text"
+								class="form-control"
+								id="price"
+								placeholder="Enter price"
+							/>
+						</div>
+						<small class="form-text text-muted"
+							>You can update your price at any time.</small
+						>
+					</div>
+					<p class="mt-3">
+						Selling a collector, classic, or JDM?
+						<a href="#">Click here</a><br />
+						Buying this vehicle instead? <a href="#">Click here</a>
+					</p>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button
+					type="button"
+					class="btn btn-outline-secondary"
+					data-bs-dismiss="modal"
+				>
+					CLOSE
+				</button>
+				<button type="button" class="btn btn-warning">
+					ADD VEHICLE
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
