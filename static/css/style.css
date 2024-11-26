@@ -1,0 +1,173 @@
+body {
+	font-family: "Outfit", sans-serif;
+	text-shadow: none;
+}
+
+.navbar-toggler {
+	border-color: rgba(255, 255, 255, 0.5); /* White border with transparency */
+}
+.navbar-toggler-icon {
+	background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+	/* White bars for the toggler */
+}
+
+.navbar-toggler:focus,
+.navbar-toggler.active {
+	outline: none;
+	box-shadow: none;
+}
+
+.custom-navbar {
+	background-color: rgb(64, 135, 177) !important;
+}
+
+.custom-navbar a {
+	color: white !important;
+}
+
+.custom-navbar .navbar-brand {
+	font-weight: 600 !important;
+}
+
+.custom-navbar .nav-link {
+	position: relative;
+	text-decoration: none;
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+	margin-right: 20px;
+}
+
+.custom-navbar .nav-link.active::after {
+	content: "";
+	display: block;
+	width: 100%;
+	height: 1px;
+	background-color: #ffffff; /* White underline for active link */
+	position: absolute;
+	bottom: 4px;
+	left: 0;
+}
+
+.custom-navbar .sign-in-btn {
+	border-color: #ccc !important;
+	background: none !important;
+	color: white !important;
+}
+
+.custom-navbar .sign-in-btn:hover {
+	border-color: white !important;
+	background: none !important;
+}
+
+.hero-section {
+	position: relative;
+	background-image: url("/static/images/horo-section-bg-big.jpg"); /* Default for desktops */
+	background-size: cover;
+	background-position: center;
+	color: #fff;
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+	height: 100vh;
+}
+
+.hero-section::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0); /* Dark overlay for better readability */
+	z-index: 1;
+}
+
+.hero-section .container {
+	z-index: 2; /* Ensure content is above the overlay */
+}
+
+.hero-section .title {
+	font-weight: 400;
+	padding-top: 180px;
+}
+
+.hero-section .sign-up-btn {
+	background-color: #ecb238;
+	border: none;
+	text-shadow: none;
+	color: black;
+	padding-left: 60px;
+	padding-right: 60px;
+	cursor: pointer;
+}
+
+.companies-uses {
+	background-color: #f4f4f4;
+	padding: 20px 0;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.companies-uses img {
+	width: 150px;
+}
+
+.supported-section {
+	background-image: url("/static/images/cars.png"); /* Replace with your image path */
+	background-size: cover;
+	height: 80vh;
+	width: 100%;
+}
+
+.supported-section .card {
+	background-color: white;
+	border-radius: 16px;
+	max-width: 400px;
+}
+
+.supported-section img {
+	max-height: 40px;
+}
+
+.text-shadow-none {
+	text-shadow: none;
+}
+
+.btn-custom {
+	background-color: #ecb238;
+}
+
+.btn-custom:hover {
+	background-color: #ecb238;
+}
+
+.custom-accordion button {
+	background: none !important;
+	box-shadow: none !important;
+}
+
+.footer a {
+	text-decoration: none;
+}
+
+.footer a:hover {
+	text-decoration: underline;
+}
+
+.step-number {
+	background-color: rgb(73, 154, 183);
+	color: white;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 10px;
+	font-size: 30px;
+	font-weight: bold;
+	margin: auto;
+	height: 80px;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+	.hero-section {
+		background-image: url("/static/images/horo-section-bg-big.jpg"); /* Replace with your mobile-specific image */
+		/* background-attachment: scroll; Disable parallax for better mobile performance */
+	}
+}
