@@ -3,6 +3,19 @@
 {% block content %}
 <section class="dashboard-section my-3">
 	<div class="container py-5">
+		{% if not is_profile_complete %}
+		<div class="alert alert-warning mb-4">
+			<h4>Complete Your Profile</h4>
+			<p>Your profile is incomplete. Please update your profile to access all features.</p>
+			<a href="{% url 'add_or_update_profile' %}" class="btn btn-warning">Complete Your Profile</a>
+		</div>
+		{% else %}
+		<div class="alert alert-success mb-4">
+			<h4>Profile Completed</h4>
+			<p>Your profile is complete. Thank you!</p>
+			<a href="{% url 'add_or_update_profile' %}" class="btn btn-warning">Update Your Profile</a>
+		</div>
+		{% endif %}
 		<div class="row align-items-center mb-5">
 			<div class="col-md-10">
 				<h4>Selling</h4>

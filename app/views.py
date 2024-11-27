@@ -6,7 +6,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as auth_login
 from .forms import LoginForm, SignupForm
 from django.contrib.auth.decorators import login_required
-
+from .models import UserProfile
+from .forms import UserProfileForm
 
 def load_json_file(file_path):
     absolute_path = os.path.join(settings.BASE_DIR, file_path)
@@ -28,8 +29,19 @@ def auth(request):
 
 @login_required(login_url="auth")
 def dashboard(request):
+    try:
+        profile = request.user.profile
+        is_profile_complete = all([
+            profile.profile_image,
+            profile.id_card_front,
+            profile.id_card_back
+        ])
+    except UserProfile.DoesNotExist:
+        is_profile_complete = False
+    
     context = {
-        "header_color": "background-color: rgb(26, 43, 99) !important"
+        "header_color": "background-color: rgb(26, 43, 99) !important",
+        "is_profile_complete": is_profile_complete 
     }
     return render(request, "dashboard.html", context)
 
@@ -80,6 +92,30 @@ def contact(request):
         "header_color": "background-color: rgb(26, 43, 99) !important"
     }
     return render(request, "contact.html", context)
+
+@login_required(login_url="auth")
+def add_or_update_profile(request):
+    try:
+        profile = request.user.profile
+        if request.method == 'POST':
+            form = UserProfileForm(request.POST, request.FILES, instance=profile, user=request.user)
+            if form.is_valid():
+                form.save()
+                return redirect('add_or_update_profile')
+        else:
+            form = UserProfileForm(instance=profile, user=request.user)
+    except UserProfile.DoesNotExist:
+        if request.method == 'POST':
+            form = UserProfileForm(request.POST, request.FILES, user=request.user)
+            if form.is_valid():
+                user_profile = form.save(commit=False)
+                user_profile.user = request.user
+                user_profile.save()
+                return redirect('add_or_update_profile')
+        else:
+            form = UserProfileForm(user=request.user)
+    return render(request, 'profile.html', {'form': form})
+
 
 def user_login(request):
     if request.method == "POST":

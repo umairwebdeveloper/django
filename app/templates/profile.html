@@ -1,0 +1,130 @@
+{% extends "base.html" %} {% block content %}
+<section class="py-5">
+	<div class="container">
+		<h2 class="text-center">
+			{% if form.instance.pk %}Update Your Profile{% else %}Add Your
+			Profile{% endif %}
+		</h2>
+		<p class="text-center">
+			Your submission is under review. Please wait for admin approval.
+		</p>
+		<h4 class="text-center">
+			Status:
+			<span class="text-warning text-capitalize"
+				>{{request.user.profile.status}}</span
+			>
+		</h4>
+
+		<form method="post" enctype="multipart/form-data" class="mt-4">
+			{% csrf_token %} {% if form.errors %}
+			<div class="alert alert-danger">
+				<ul>
+					{% for field, errors in form.errors.items %} {% for error in errors %}
+					<li>{{ error }}</li>
+					{% endfor %} {% endfor %}
+				</ul>
+			</div>
+			{% endif %}
+
+			<div class="row mb-4">
+				<div class="col-md-3 mb-3">
+					<label for="id_first_name">First Name:</label>
+					{{ form.first_name }}
+				</div>
+				<div class="col-md-3 mb-3">
+					<label for="id_last_name">Last Name:</label>
+					{{ form.last_name }}
+				</div>
+				<div class="col-md-3 mb-3">
+					<label for="id_username">Username:</label>
+					{{ form.username }}
+				</div>
+				<div class="col-md-3 mb-3">
+					<label for="id_email">Email:</label>
+					{{ form.email }}
+				</div>
+			</div>
+			<div class="row mb-4">
+				<div class="col-md-4 mb-3">
+					<label for="id_profile_image">Profile Image:</label>
+					<input
+						type="file"
+						id="id_profile_image"
+						name="profile_image"
+						onchange="previewImage(event, 'profileImagePreview')"
+						class="form-control"
+					/>
+					<div class="mt-2">
+						<img
+							id="profileImagePreview"
+							src="{% if form.instance.profile_image %}{{ form.instance.profile_image.url }}{% endif %}"
+							alt="Profile Image Preview"
+							class="img-fluid rounded-3"
+							style="max-width: 300px; max-height: 300px"
+						/>
+					</div>
+				</div>
+
+				<div class="col-md-4 mb-3">
+					<label for="id_id_card_front">ID Card Front:</label>
+					<input
+						type="file"
+						id="id_id_card_front"
+						name="id_card_front"
+						accept="image/*"
+						onchange="previewImage(event, 'idCardFrontPreview')"
+						class="form-control"
+					/>
+					<div class="mt-2">
+						<img
+							id="idCardFrontPreview"
+							src="{% if form.instance.id_card_front %}{{ form.instance.id_card_front.url }}{% endif %}"
+							alt="ID Card Front Preview"
+							class="img-fluid rounded-3"
+							style="max-width: 300px; max-height: 300px"
+						/>
+					</div>
+				</div>
+
+				<div class="col-md-4 mb-3">
+					<label for="id_id_card_back">ID Card Back:</label>
+					<input
+						type="file"
+						id="id_id_card_back"
+						name="id_card_back"
+						accept="image/*"
+						onchange="previewImage(event, 'idCardBackPreview')"
+						class="form-control"
+					/>
+					<div class="mt-2">
+						<img
+							id="idCardBackPreview"
+							src="{% if form.instance.id_card_back %}{{ form.instance.id_card_back.url }}{% endif %}"
+							alt="ID Card Back Preview"
+							class="img-fluid rounded-3"
+							style="max-width: 300px; max-height: 300px"
+						/>
+					</div>
+				</div>
+			</div>
+			<button type="submit" class="btn btn-primary">
+				{% if form.instance.pk %}Update{% else %}Add{% endif %}
+			</button>
+		</form>
+	</div>
+</section>
+
+<script>
+	function previewImage(event, previewId) {
+		const file = event.target.files[0];
+		if (file) {
+			const reader = new FileReader();
+			reader.onload = function (e) {
+				const previewElement = document.getElementById(previewId);
+				previewElement.src = e.target.result;
+			};
+			reader.readAsDataURL(file);
+		}
+	}
+</script>
+{% endblock %}
