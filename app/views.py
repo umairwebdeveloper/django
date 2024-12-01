@@ -1,26 +1,88 @@
 from django.conf import settings
 from django.contrib.auth import authenticate, login as auth_login
-
 from .utils import generate_secure_password, load_json_file, send_email
-from .forms import LoginForm, SignupForm
+from .forms import LoginForm, StartUserForm
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile, Transaction
 from .forms import UserProfileForm
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import Http404
+from django.contrib import messages
+from django.core.exceptions import ValidationError
 
-
-def auth(request):
+def login(request):
     if request.user.is_authenticated:
         return redirect("dashboard")
-    signup_form = SignupForm()
+    errors = None
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=email, password=password)
+            if user: 
+                auth_login(request, user)  
+                return redirect('dashboard') 
+            else:
+                form.add_error(None, "Invalid email or password")
+        else:
+            errors = form.errors
     signin_form = LoginForm()
+    
     context = {
-        "signup_form": signup_form,
         "signin_form": signin_form,
-        "header_color": "background-color: rgb(26, 43, 99) !important"
+        "errors": errors,
+        "header_color": "background-color: rgb(26, 43, 99) !important",
     }
     
-    return render(request, "auth.html", context)
+    return render(request, "login.html", context)
+
+
+def register(request, transaction_id):
+    transaction = get_object_or_404(Transaction, transaction_id=transaction_id)
+    transaction_email = transaction.user.email
+    user_instance = transaction.user  # Get the user instance from the transaction
+
+
+    if not transaction_email:
+        raise Http404("Associated email not found for the transaction.")
+
+    # if request.user.is_authenticated:
+    #     return redirect("dashboard")
+    errors = None
+    if request.method == 'POST':
+        form = StartUserForm(request.POST, user_instance=user_instance)
+        if form.is_valid():
+            try:
+                user = form.save()
+                password = form.cleaned_data['password']
+                messages.success(request, "User updated successfully.")
+                subject = 'Welcome to KeySavvy! We are your partner in private party vehicle sales.'
+                recipient_list = [user.email]
+                template_path = 'emails/wellcome.html'
+                context = {
+                    "user_email": user.email,
+                    "user_password": password, 
+                    "first_name": user.first_name,
+                    "last_name": user.last_name
+                }
+                send_email(subject, recipient_list, template_path, context)
+                return redirect('auth')  # Redirect to a suitable page
+            except Exception as e:
+                messages.error(request, f"Error saving form: {str(e)}")
+        else:
+            errors = form.errors
+            messages.error(request, "Please correct the errors below.")
+
+    else:
+        form = StartUserForm(user_instance=user_instance)
+
+    context = {
+        "signup_form": form,
+        "errors": errors,
+        "header_color": "background-color: rgb(26, 43, 99) !important",
+    }
+    return render(request, "register.html", context)
 
 @login_required(login_url="auth")
 def dashboard(request):
@@ -119,58 +181,47 @@ def user_login(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             user = authenticate(request, username=username, password=password)
-            if user:
+            if user: 
                 auth_login(request, user)  
                 return redirect('dashboard') 
             else:
                 form.add_error(None, "Invalid username or password.")
         else:
             form.add_error(None, "Please correct the errors below.")
-    else:
-        form = LoginForm()
+    return redirect('auth')
 
-    return render(request, 'auth.html', {
-        "signin_form": form,
-        "signup_form": SignupForm(),  
-    })
-
-def user_signup(request):
+def start_user_form(request):
     if request.method == "POST":
-        form = SignupForm(request.POST)
+        form = StartUserForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password']) 
-            user.save()
+            try:
+                form.save()
+                email = form.cleaned_data['email']
+                password = form.cleaned_data['password']
+                print(email, password)
+                user = authenticate(request, email=email, password=password)
 
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
-
-            if user:
-                auth_login(request, user)
-                subject = 'Welcome to KeySavvy! We are your partner in private party vehicle sales.'
-                recipient_list = [user.email]
-                template_path = 'emails/wellcome.html'
-                context = {
-                    "user_email": user.email,
-                    "user_name": user.username,
-                    "user_password": password, 
-                    "first_name":user.first_name,
-                    "last_name": user.last_name
-                }
-                send_email(subject, recipient_list, template_path, context) 
-                return redirect('dashboard')
+                if user:
+                    auth_login(request, user)
+                    subject = 'Welcome to KeySavvy! We are your partner in private party vehicle sales.'
+                    recipient_list = [user.email]
+                    template_path = 'emails/wellcome.html'
+                    context = {
+                        "user_email": user.email,
+                        "user_name": user.username,
+                        "user_password": password, 
+                        "first_name": user.first_name,
+                        "last_name": user.last_name
+                    }
+                    send_email(subject, recipient_list, template_path, context)
+                    messages.success(request, "User updated successfully!")
+                    return redirect(request.META.get('HTTP_REFERER', 'default_redirect_url'))
+            except ValidationError as e:
+                print(123123123, e)
+                messages.error(request, f"Error: {e.message}")
         else:
-            return render(request, 'auth.html', {
-                "signup_form": form,
-                "signin_form": LoginForm(),
-            })
-
-    return render(request, 'auth.html', {
-        "signup_form": SignupForm(),
-        "signin_form": LoginForm(),
-    })
-    
+            print(242)
+    return redirect(request.META.get('HTTP_REFERER', 'default_redirect_url'))
 
 def verify_transaction(request, transaction_id):
     """
@@ -193,30 +244,30 @@ def verify_transaction(request, transaction_id):
             context["error"] = "*Invalid VIN entered"
             return render(request, "verify_transaction.html", context)
     
-    return render(request, "verify_trasaction.html", context)
+    return render(request, "verify_transaction.html", context)
 
 
 def vehicle_details(request, transaction_id):
     transaction = get_object_or_404(Transaction, transaction_id=transaction_id)
 
-    if request.method == "POST":
-        # Create user and send email
-        user = transaction.user
-        new_password = generate_secure_password(length=8)
-        user.set_password(new_password)  # generated password
-        user.save()
-        subject = 'Welcome to KeySavvy! We are your partner in private party vehicle sales.'
-        recipient_list = [user.email]
-        template_path = 'emails/wellcome.html'
-        context = {
-            "user_email": user.email,
-            "user_name": user.username,
-            "user_password": new_password, 
-            "first_name":user.first_name,
-            "last_name": user.last_name
-        }
-        send_email(subject, recipient_list, template_path, context) 
+    # if request.method == "POST":
+    #     # Create user and send email
+    #     user = transaction.user
+    #     new_password = generate_secure_password(length=8)
+    #     user.set_password(new_password)  # generated password
+    #     user.save()
+    #     subject = 'Welcome to KeySavvy! We are your partner in private party vehicle sales.'
+    #     recipient_list = [user.email]
+    #     template_path = 'emails/wellcome.html'
+    #     context = {
+    #         "user_email": user.email,
+    #         "user_name": user.username,
+    #         "user_password": new_password, 
+    #         "first_name":user.first_name,
+    #         "last_name": user.last_name
+    #     }
+    #     # send_email(subject, recipient_list, template_path, context) 
 
-        return redirect("/login/")
+    #     return redirect("auth")
 
     return render(request, "vehicle_details.html", {"transaction": transaction, "header_color": "background-color: rgb(26, 43, 99) !important"})

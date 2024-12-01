@@ -1,0 +1,114 @@
+{% extends 'base.html' %} {% block title %}Login | Keysavvy{% endblock %} {% block content %}
+<div class="container my-5">
+	<div class="row">
+		<!-- Login Form -->
+		<div class="col-md-6">
+			<div class="card shadow-sm">
+				<div class="card-body">
+					<h1 class="card-title text-center mt-4">Log in</h1>
+					<p class="text-center mb-4">
+						Sign in with this account only for Admin.
+					</p>
+                    {% if errors %}
+						<div class="alert alert-danger">
+							<ul>
+								{% for field, field_errors in errors.items %}
+								{% for error in field_errors %}
+								<li>{{ error }}</li>
+								{% endfor %}
+								{% endfor %}
+							</ul>
+						</div>
+						{% endif %}
+					<form method="POST">
+						{% csrf_token %}
+						<div class="mb-3">
+							<label for="emailUsername" class="form-label"
+								>Email</label
+							>
+							<input
+								type="text"
+								class="form-control {% if signin_form.errors.username %}is-invalid{% endif %}"
+								id="emailUsername"
+								name="email"
+								placeholder="Enter Email"
+								value="{{ signin_form.username.value|default_if_none:'' }}"
+								required
+							/>
+							{% if signin_form.errors.username %}
+							<div class="invalid-feedback">
+								{{ signin_form.errors.username.0 }}
+							</div>
+							{% endif %}
+						</div>
+						<div class="mb-3">
+							<label for="password" class="form-label"
+								>Password</label
+							>
+							<div class="input-group">
+								<input
+									type="password"
+									class="form-control password-field {% if signin_form.errors.password %}is-invalid{% endif %}"
+									id="password"
+									name="password"
+									placeholder="Enter Password"
+									required
+								/>
+								<span
+									class="input-group-text toggle-password"
+									style="cursor: pointer"
+								>
+									<i class="bi bi-eye-slash"></i>
+								</span>
+								{% if signin_form.errors.password %}
+								<div class="invalid-feedback">
+									{{ signin_form.errors.password.0 }}
+								</div>
+								{% endif %}
+							</div>
+						</div>
+						{% if signin_form.non_field_errors %}
+						<div class="alert alert-danger">
+							{{ signin_form.non_field_errors|join:"<br />" }}
+						</div>
+						{% endif %}
+						<button type="submit" class="btn btn-warning w-100">
+							LOGIN →
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<section
+	class="questions-section py-5 text-white"
+	style="background-color: #1a5063"
+>
+	<div class="container">
+		<h2 class="fs-1 mb-3">More questions?</h2>
+		<p class="mb-4">
+			We're happy to answer them. Click the button below to send the team
+			a message.
+		</p>
+		<a href="" class="btn btn-outline-warning btn-lg">Chat With Us</a>
+	</div>
+</section>
+
+<script>
+	$(document).ready(function () {
+		// Toggle password visibility
+		$(".toggle-password").click(function () {
+			const input = $(this).siblings(".password-field");
+			const icon = $(this).find("i");
+			if (input.attr("type") === "password") {
+				input.attr("type", "text");
+				icon.removeClass("bi-eye-slash").addClass("bi-eye");
+			} else {
+				input.attr("type", "password");
+				icon.removeClass("bi-eye").addClass("bi-eye-slash");
+			}
+		});
+	});
+</script>
+{% endblock %}

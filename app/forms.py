@@ -2,51 +2,74 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from .models import UserProfile
+from django.contrib.auth.password_validation import validate_password
 import mimetypes
 
 class LoginForm(forms.Form):
-    username = forms.CharField(max_length=150, required=True)
+    email = forms.EmailField(max_length=150, required=True)
     password = forms.CharField(widget=forms.PasswordInput, required=True)
 
-class SignupForm(forms.ModelForm):
+class StartUserForm(forms.ModelForm):
     password = forms.CharField(
-        widget=forms.PasswordInput(attrs={'placeholder': 'Password', 'class': 'form-control'}),
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Password',
+            'class': 'form-control',
+            'autocomplete': 'new-password',
+            'required': 'required',
+        }),
         label="Password",
-    )
-    confirm_password = forms.CharField(
-        widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password', 'class': 'form-control'}),
-        label="Confirm Password",
     )
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email']
+        fields = ['first_name', 'last_name', 'email']
         widgets = {
-            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
-            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
-            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'User Name'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter Email'}),
+            'first_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'First Name',
+                'required': 'required',
+            }),
+            'last_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Last Name',
+                'required': 'required',
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter Email',
+                'required': 'required',
+                'autocomplete': 'new-email',
+            }),
         }
 
+    def __init__(self, *args, **kwargs):
+        self.user_instance = kwargs.pop('user_instance', None)
+        super().__init__(*args, **kwargs)
+        if self.user_instance:
+            self.fields['email'].initial = self.user_instance.email
+            self.fields['email'].disabled = True  # Disable email field since it shouldn't be updated
+
     def clean_email(self):
+        # Ensure email matches the associated user
         email = self.cleaned_data.get('email')
-        if User.objects.filter(email=email).exists():
-            raise ValidationError("A user with this email already exists.")
+        if self.user_instance and email != self.user_instance.email:
+            raise ValidationError("Email cannot be changed.")
         return email
 
-    def clean(self):
-        cleaned_data = super().clean()
-        password = cleaned_data.get('password')
-        confirm_password = cleaned_data.get('confirm_password')
-
-        if password and confirm_password and password != confirm_password:
-            self.add_error('confirm_password', "Passwords do not match.")
+    def save(self, commit=True):
+        if not self.user_instance:
+            raise ValueError("User instance must be provided to update the user.")
         
-        if len(password) < 8:
-            self.add_error('password', "Password must be at least 8 characters long.")
+        # Update user fields
+        user = self.user_instance
+        user.first_name = self.cleaned_data.get('first_name')
+        user.last_name = self.cleaned_data.get('last_name')
+        user.set_password(self.cleaned_data.get('password'))
+        
+        if commit:
+            user.save()
+        return user
 
-        return cleaned_data
-    
 
 class UserProfileForm(forms.ModelForm):
     username = forms.CharField(
@@ -120,3 +143,28 @@ class UserProfileForm(forms.ModelForm):
             if not mime_type or not mime_type.startswith('image'):
                 raise ValidationError(f"{field_name} must be a valid image file.")
         return image
+    
+from django.utils.crypto import get_random_string
+
+class CustomUserCreationForm(forms.ModelForm):    
+    class Meta:
+        model = User
+        fields = ('email',)
+
+    def clean_email(self):
+        # Validate that the email is unique
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("A user with this email already exists.")
+        return email
+
+    def save(self, commit=True):
+        # Save the user with a randomly generated password
+        user = super().save(commit=False)
+        user.username = user.email  # Use the email as username
+        random_password = get_random_string(12)  # Generate a random password
+        user.set_password(random_password)
+        user.generated_password = random_password  # Add this attribute for later use
+        if commit:
+            user.save()
+        return user

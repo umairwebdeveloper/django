@@ -46,6 +46,9 @@ def send_transaction_approval_email(sender, instance, created, **kwargs):
         context = {
             'first_name': user.first_name,
             'last_name': user.last_name,
-            'status': instance.status,
+            'approved': instance.approved,
         }
         send_email(subject,recipient_list,template_path,context)
+        # Update the email_sent field
+        instance.email_sent = True
+        instance.save(update_fields=['email_sent'])  # Save only the email_sent field

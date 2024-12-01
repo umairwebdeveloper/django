@@ -1,0 +1,121 @@
+{% extends 'base.html' %} {% block title %}Signup | Keysavvy{% endblock %} {% block content %}
+<div class="container my-5">
+	<div class="row justify-content-center">
+		
+			<!-- Signup Form -->
+			<div class="col-md-6">
+				<div class="card shadow-sm">
+					<div class="card-body">
+						<h1 class="card-title text-center mt-4">Sign Up</h1>
+						<p class="text-center mb-4">
+							Sign in with this account only for Admin.
+						</p>
+						{% if errors %}
+						<div class="alert alert-danger">
+							<ul>
+								{% for field, field_errors in errors.items %}
+								{% for error in field_errors %}
+								<li>{{ error }}</li>
+								{% endfor %}
+								{% endfor %}
+							</ul>
+						</div>
+						{% endif %}
+						<form method="post" novalidate>
+        {% csrf_token %}
+        <!-- First Name -->
+        <div class="mb-3">
+            <label for="id_first_name" class="form-label">First Name</label>
+            {{ signup_form.first_name }}
+            {% if signup_form.first_name.errors %}
+                <div class="invalid-feedback">
+                    {{ signup_form.first_name.errors|join:", " }}
+                </div>
+            {% endif %}
+        </div>
+        <!-- Last Name -->
+        <div class="mb-3">
+            <label for="id_last_name" class="form-label">Last Name</label>
+            {{ signup_form.last_name }}
+            {% if signup_form.last_name.errors %}
+                <div class="invalid-feedback">
+                    {{ signup_form.last_name.errors|join:", " }}
+                </div>
+            {% endif %}
+        </div>
+        <!-- Email -->
+        <div class="mb-3">
+            <label for="id_email" class="form-label">Email</label>
+            {{ signup_form.email }}
+            {% if signup_form.email.errors %}
+                <div class="invalid-feedback">
+                    {{ signup_form.email.errors|join:", " }}
+                </div>
+            {% endif %}
+        </div>
+        <!-- Password -->
+        <div class="mb-3">
+            <label for="id_password" class="form-label">Password</label>
+            {{ signup_form.password }}
+            {% if signup_form.password.errors %}
+                <div class="invalid-feedback">
+                    {{ signup_form.password.errors|join:", " }}
+                </div>
+            {% endif %}
+        </div>
+        <!-- Submit Button -->
+		 <div class="d-flex justify-content-end">
+        	<button type="submit"  class="btn btn-custom">Submit</button>
+		 </div>
+    </form>
+					</div>
+				</div>
+			</div>
+	</div>
+</div>
+<section
+	class="questions-section py-5 text-white"
+	style="background-color: #1a5063"
+>
+	<div class="container">
+		<h2 class="fs-1 mb-3">More questions?</h2>
+		<p class="mb-4">
+			We're happy to answer them. Click the button below to send the team
+			a message.
+		</p>
+		<a href="" class="btn btn-outline-warning btn-lg">Chat With Us</a>
+	</div>
+</section>
+<script>
+    // Add Bootstrap validation feedback dynamically
+    (function () {
+        'use strict'
+        const forms = document.querySelectorAll('form')
+        Array.from(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+<script>
+	$(document).ready(function () {
+		// Toggle password visibility
+		$(".toggle-password").click(function () {
+			const input = $(this).siblings(".password-field");
+			const icon = $(this).find("i");
+			if (input.attr("type") === "password") {
+				input.attr("type", "text");
+				icon.removeClass("bi-eye-slash").addClass("bi-eye");
+			} else {
+				input.attr("type", "password");
+				icon.removeClass("bi-eye").addClass("bi-eye-slash");
+			}
+		});
+	});
+</script>
+{% endblock %}

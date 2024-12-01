@@ -17,10 +17,7 @@
 <div class="container text-center py-4">
     <h6 class="mb-4">Sign up and tell your seller you want to pay online with KeySavvy:</h6>
     <h6>{{ transaction.vehicle.year }} {{ transaction.vehicle.make }} {{ transaction.vehicle.model }}</h6>
-    <h6>{{ transaction.vehicle.serial_number }}</>
-    <form method="post">
-        {% csrf_token %}
-        <button class="btn btn-custom px-5 mt-3" type="submit">Sign Up</button>
-    </form>
+    <h6>{{ transaction.vehicle.serial_number }}</h6>
+    <a href="/auth_id/{{ transaction.transaction_id }}" class="btn btn-custom px-5 mt-3" type="submit">Sign Up</a>
 </div>
 {% endblock %}
