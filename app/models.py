@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -18,3 +19,31 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s Profile"
+
+
+class Vehicle(models.Model):
+    serial_number = models.CharField(max_length=100, unique=True)
+    make = models.CharField(max_length=50)
+    model = models.CharField(max_length=50)
+    year = models.IntegerField()
+    price = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.year} {self.make} {self.model} / {self.serial_number} / ${self.price}"
+
+class Transaction(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE)
+    transaction_id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    link = models.URLField(blank=True)
+    email_sent = models.BooleanField(default=False)
+    approved = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def link(self):
+        """Automatically generate the link based on the transaction_id."""
+        return f"https://shop-result224.app/verify/{self.transaction_id}/"
+
+    def __str__(self):
+        return f"Transaction for {self.vehicle.serial_number} by {self.user.email}"

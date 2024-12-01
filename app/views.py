@@ -1,35 +1,12 @@
-import os
-import json
 from django.conf import settings
-from django.shortcuts import render
-from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as auth_login
+
+from .utils import generate_secure_password, load_json_file, send_email
 from .forms import LoginForm, SignupForm
 from django.contrib.auth.decorators import login_required
-from .models import UserProfile
+from .models import UserProfile, Transaction
 from .forms import UserProfileForm
-from django.conf import settings
-from django.core.mail import EmailMessage
-from django.template.loader import render_to_string
-
-
-def send_email(subject, recipient_list, template_path, context):
-    message = render_to_string(template_path, context)
-    email = EmailMessage(
-        subject=subject,
-        body=message,
-        from_email=settings.EMAIL_HOST_USER,
-        to=recipient_list,
-    )
-    email.content_subtype = 'html'
-    email.send()
-    print("email send")
-
-
-def load_json_file(file_path):
-    absolute_path = os.path.join(settings.BASE_DIR, file_path)
-    with open(absolute_path, 'r', encoding='utf-8') as file:
-        return json.load(file)
+from django.shortcuts import render, redirect, get_object_or_404
 
 
 def auth(request):
@@ -171,13 +148,15 @@ def user_signup(request):
 
             if user:
                 auth_login(request, user)
-                subject = 'Wellcome Message from Keysavvy'
-                recipient_list = ["umairashraf5252@gmail.com"]
+                subject = 'Welcome to KeySavvy! We are your partner in private party vehicle sales.'
+                recipient_list = [user.email]
                 template_path = 'emails/wellcome.html'
                 context = {
                     "user_email": user.email,
                     "user_name": user.username,
-                    "user_password": password
+                    "user_password": password, 
+                    "first_name":user.first_name,
+                    "last_name": user.last_name
                 }
                 send_email(subject, recipient_list, template_path, context) 
                 return redirect('dashboard')
@@ -191,3 +170,53 @@ def user_signup(request):
         "signup_form": SignupForm(),
         "signin_form": LoginForm(),
     })
+    
+
+def verify_transaction(request, transaction_id):
+    """
+        view to verify the serial number and email from the unique link.
+    """
+    transaction = get_object_or_404(Transaction, transaction_id=transaction_id)
+    faq_data = load_json_file('app/faq_data/sell.json')
+    
+    context = {
+        "transaction": transaction,    
+        "faq_data": faq_data,
+        "header_color": "background-color: rgb(26, 43, 99) !important"
+     }
+
+    if request.method == "POST":
+        entered_serial = request.POST.get("serial_number")
+        if entered_serial == transaction.vehicle.serial_number:
+            return redirect(f"/details/{transaction.transaction_id}/")
+        else:
+            context["error"] = "*Invalid VIN entered"
+            return render(request, "verify_transaction.html", context)
+    
+    return render(request, "verify_trasaction.html", context)
+
+
+def vehicle_details(request, transaction_id):
+    transaction = get_object_or_404(Transaction, transaction_id=transaction_id)
+
+    if request.method == "POST":
+        # Create user and send email
+        user = transaction.user
+        new_password = generate_secure_password(length=8)
+        user.set_password(new_password)  # generated password
+        user.save()
+        subject = 'Welcome to KeySavvy! We are your partner in private party vehicle sales.'
+        recipient_list = [user.email]
+        template_path = 'emails/wellcome.html'
+        context = {
+            "user_email": user.email,
+            "user_name": user.username,
+            "user_password": new_password, 
+            "first_name":user.first_name,
+            "last_name": user.last_name
+        }
+        send_email(subject, recipient_list, template_path, context) 
+
+        return redirect("/login/")
+
+    return render(request, "vehicle_details.html", {"transaction": transaction, "header_color": "background-color: rgb(26, 43, 99) !important"})

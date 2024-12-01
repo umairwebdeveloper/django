@@ -1,0 +1,26 @@
+{% extends 'base.html' %} {% block title %}Buy | Keysavvy{% endblock %}
+<!-- gap -->
+{% block content %}
+<section class="text-white py-3" style="{{header_color}}">
+	<div class="container py-5">
+		<h1
+			class="display-3 mb-3 title text-shadow-none"
+			style="font-weight: 400"
+		>
+			The safest way to pay a private seller
+		</h1>
+		<p class="lead mb-4 text-shadow-none">
+			KeySavvy protects you from title fraud while making it easy to pay a private seller.
+		</p>
+	</div>
+</section>
+<div class="container text-center py-4">
+    <h6 class="mb-4">Sign up and tell your seller you want to pay online with KeySavvy:</h6>
+    <h6>{{ transaction.vehicle.year }} {{ transaction.vehicle.make }} {{ transaction.vehicle.model }}</h6>
+    <h6>{{ transaction.vehicle.serial_number }}</>
+    <form method="post">
+        {% csrf_token %}
+        <button class="btn btn-custom px-5 mt-3" type="submit">Sign Up</button>
+    </form>
+</div>
+{% endblock %}

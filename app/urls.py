@@ -16,4 +16,7 @@ urlpatterns = [
     path('signup/', views.user_signup, name='signup'),
     path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
     path('profile/', views.add_or_update_profile, name='add_or_update_profile'),
+    path("verify/<str:transaction_id>/", views.verify_transaction, name="verify_transaction"),
+    path("details/<str:transaction_id>/", views.vehicle_details, name="vehicle_details"),
+
 ]
