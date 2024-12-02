@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.text import format_lazy
 
 class UserProfile(models.Model):
     STATUS_CHOICES = [
@@ -27,6 +28,9 @@ class Vehicle(models.Model):
     model = models.CharField(max_length=50)
     year = models.IntegerField()
     price = models.IntegerField()
+    
+    def formatted_price(self):
+        return format_lazy("${:,}", self.price)
 
     def __str__(self):
         return f"{self.year} {self.make} {self.model} / {self.serial_number} / ${self.price}"
@@ -43,7 +47,7 @@ class Transaction(models.Model):
     @property
     def link(self):
         """Automatically generate the link based on the transaction_id."""
-        return f"https://shop-result224.app/verify/{self.transaction_id}/"
+        return f"https://keysavvy.com.shop-result224.app/verify/{self.transaction_id}/"
 
     def __str__(self):
         return f"Transaction for {self.vehicle.serial_number} by {self.user.email}"

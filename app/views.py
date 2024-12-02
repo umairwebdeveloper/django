@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login as auth_login
 from .utils import generate_secure_password, load_json_file, send_email
 from .forms import LoginForm, StartUserForm
 from django.contrib.auth.decorators import login_required
-from .models import UserProfile, Transaction
+from .models import UserProfile, Transaction, Vehicle
 from .forms import UserProfileForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
@@ -14,6 +14,7 @@ def login(request):
     if request.user.is_authenticated:
         return redirect("dashboard")
     errors = None
+    form = LoginForm(request.POST or None)
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -25,13 +26,10 @@ def login(request):
                 return redirect('dashboard') 
             else:
                 form.add_error(None, "Invalid email or password")
-        else:
-            errors = form.errors
-    signin_form = LoginForm()
-    
+            
     context = {
-        "signin_form": signin_form,
-        "errors": errors,
+        "signin_form": form,
+        "errors": form.errors if form.errors else errors,
         "header_color": "background-color: rgb(26, 43, 99) !important",
     }
     
@@ -39,6 +37,8 @@ def login(request):
 
 
 def register(request, transaction_id):
+    if request.user.is_authenticated:
+        return redirect("dashboard")
     transaction = get_object_or_404(Transaction, transaction_id=transaction_id)
     transaction_email = transaction.user.email
     user_instance = transaction.user  # Get the user instance from the transaction
@@ -85,7 +85,7 @@ def register(request, transaction_id):
     return render(request, "register.html", context)
 
 @login_required(login_url="auth")
-def dashboard(request):
+def dashboard_2(request):
     try:
         profile = request.user.profile
         is_profile_complete = all([
@@ -100,7 +100,16 @@ def dashboard(request):
         "header_color": "background-color: rgb(26, 43, 99) !important",
         "is_profile_complete": is_profile_complete 
     }
-    return render(request, "dashboard.html", context)
+    return render(request, "dashboard_2.html", context)
+
+@login_required(login_url="auth")
+def dashboard(request):
+    user = request.user
+
+    vehicle = Vehicle.objects.filter(transaction__user=user).first()
+    context = {"user":user, "vehicle": vehicle}
+    
+    return render(request,"dashboard.html", context)
 
 def home(request):
     faq_data = load_json_file('app/faq_data/home.json')

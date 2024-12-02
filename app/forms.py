@@ -6,9 +6,24 @@ from django.contrib.auth.password_validation import validate_password
 import mimetypes
 
 class LoginForm(forms.Form):
-    email = forms.EmailField(max_length=150, required=True)
-    password = forms.CharField(widget=forms.PasswordInput, required=True)
-
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'Enter Email',
+            'class': 'form-control',
+            'autocomplete': 'new-email',
+            'required': 'required',
+        }),
+        label="Email",
+    )
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'placeholder': 'Password',
+            'class': 'form-control',
+            'autocomplete': 'new-password',
+            'required': 'required',
+        }),
+        label="Password",
+    )
 class StartUserForm(forms.ModelForm):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={

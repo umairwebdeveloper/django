@@ -7,7 +7,7 @@
 				<div class="card-body">
 					<h1 class="card-title text-center mt-4">Log in</h1>
 					<p class="text-center mb-4">
-						Sign in with this account only for Admin.
+						Sign in to access KeySavvy
 					</p>
                     {% if errors %}
 						<div class="alert alert-danger">
@@ -20,7 +20,7 @@
 							</ul>
 						</div>
 						{% endif %}
-					<form method="POST">
+					<form method="POST" novalidate>
 						{% csrf_token %}
 						<div class="mb-3">
 							<label for="emailUsername" class="form-label"
@@ -28,17 +28,17 @@
 							>
 							<input
 								type="text"
-								class="form-control {% if signin_form.errors.username %}is-invalid{% endif %}"
+								class="form-control {% if signin_form.errors.email %}is-invalid{% endif %}"
 								id="emailUsername"
 								name="email"
 								placeholder="Enter Email"
-								value="{{ signin_form.username.value|default_if_none:'' }}"
+								value="{{ signin_form.email.value|default_if_none:'' }}"
 								required
 							/>
-							{% if signin_form.errors.username %}
-							<div class="invalid-feedback">
-								{{ signin_form.errors.username.0 }}
-							</div>
+							{% if signin_form.errors.email %}
+								<div class="invalid-feedback">
+									{{ signin_form.errors.email.0 }}
+								</div>
 							{% endif %}
 						</div>
 						<div class="mb-3">
@@ -61,9 +61,9 @@
 									<i class="bi bi-eye-slash"></i>
 								</span>
 								{% if signin_form.errors.password %}
-								<div class="invalid-feedback">
-									{{ signin_form.errors.password.0 }}
-								</div>
+									<div class="invalid-feedback">
+										{{ signin_form.errors.password.0 }}
+									</div>
 								{% endif %}
 							</div>
 						</div>
@@ -94,7 +94,22 @@
 		<a href="" class="btn btn-outline-warning btn-lg">Chat With Us</a>
 	</div>
 </section>
-
+<script>
+    // Add Bootstrap validation feedback dynamically
+    (function () {
+        'use strict'
+        const forms = document.querySelectorAll('form')
+        Array.from(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
 <script>
 	$(document).ready(function () {
 		// Toggle password visibility
