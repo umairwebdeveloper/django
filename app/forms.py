@@ -86,10 +86,6 @@ class StartUserForm(forms.ModelForm):
         return user
 
 class UserProfileForm(forms.ModelForm):
-    email = forms.EmailField(
-        required=True,
-        widget=forms.EmailInput(attrs={'class': 'form-control', 'disabled': 'disabled' })
-    )
     first_name = forms.CharField(
         max_length=150,
         required=False,
@@ -133,7 +129,6 @@ class UserProfileForm(forms.ModelForm):
         user = kwargs.pop('user', None)  # Get the user instance
         super().__init__(*args, **kwargs)
         if user:
-            self.fields['email'].initial = user.email
             self.fields['first_name'].initial = user.first_name
             self.fields['last_name'].initial = user.last_name
             if hasattr(user, 'phone_number'):
@@ -150,8 +145,7 @@ class UserProfileForm(forms.ModelForm):
         user = self.instance.user
         user.first_name = self.cleaned_data.get('first_name', user.first_name)
         user.last_name = self.cleaned_data.get('last_name', user.last_name)
-        if commit:
-            user.save()
+        user.save()
         phone_number = self.cleaned_data.get('phone_number')
         if hasattr(user, 'phone_number'):
             user.phone_number.number = phone_number

@@ -1,68 +1,105 @@
 {% extends "base.html" %} {% block content %}
 <section class="py-5">
 	<div class="container">
-		<h2 class="text-center">
-			{% if form.instance.pk %}Update Your Profile{% else %}Add Your
-			Profile{% endif %}
-		</h2>
-		{% if request.user.profile.status != "approved" %}
-		<p class="text-center">
-			Your submission is under review. Please wait for admin approval.
-		</p>
-		{% endif %}
-		<h4 class="text-center">
-			<span class="text-warning text-capitalize"
-				>Identity verification {{request.user.profile.status}}</span
-			>
-		</h4>
-
-		<form method="post" enctype="multipart/form-data" class="mt-4">
-			{% csrf_token %} {% if form.errors %}
+		<form method="post" enctype="multipart/form-data">
+		{% csrf_token %} 
+		{% if form.errors %}
 			<div class="alert alert-danger">
 				<ul>
 					{% for field, errors in form.errors.items %} {% for error in errors %}
-					<li>{{ error }}</li>
+					<li>{{field}}: {{ error }}</li>
 					{% endfor %} {% endfor %}
 				</ul>
 			</div>
-			{% endif %}
-
-			<div class="row mb-4">
-				<div class="col-md-3 mb-3">
+		{% endif %}
+		<h1>Account</h1>
+		<p>Looking for cars you're buying or selling? Go to your Dashboard.</p>
+		<div class="card p-3 shadow-sm mb-4">
+			<h4>Email</h4>
+			<p>
+				{{user.email}} <i class="fa-solid fa-shield text-success"></i>
+			</p>
+		</div>
+		<div class="card p-3 shadow-sm mb-4">
+			<h4>Name</h4>
+			<div class="row">
+				<div class="col-md-6 mb-3">
 					<label for="id_first_name">First Name:</label>
 					{{ form.first_name }}
 				</div>
-				<div class="col-md-3 mb-3">
+				<div class="col-md-6 mb-3">
 					<label for="id_last_name">Last Name:</label>
 					{{ form.last_name }}
 				</div>
-				<div class="col-md-3 mb-3">
-					<label for="id_email">Email:</label>
-					{{ form.email }}
-				</div>
-				<div class="col-md-3 mb-3">
-					<label for="id_phone_number">Phone Number:</label>
+			</div>
+			<div class="text-center mt-3">
+				<button type="submit" class="btn btn-warning border">Save</button>
+			</div>
+		</div>
+		<div class="card p-3 shadow-sm mb-4">
+			<h4>Phone Number</h4>
+			<div class="row">
+				<div class="col-md-12 mb-3">
+					<label for="id_phone_number">Phone:</label>
 					{{ form.phone_number }}
 				</div>
-				<div class="col-md-3 mb-3">
-					<label for="id_street_name">Street Name:</label>
+			</div>
+			<div class="form-check">
+				<input
+					class="form-check-input"
+					type="checkbox"
+					value=""
+					id="marketingOffers"
+				/>
+				<label class="form-check-label" for="marketingOffers">
+					Receive important status updates via SMS (recommended).
+					We'll never text you marketing offers.
+				</label>
+			</div>
+			<p class="text-muted mt-3">
+				By checking the box above, you agree to receive text messages
+				related to your transaction and to the Terms of Use and Privacy
+				Policy. Reply STOP to opt-out or HELP for help. Message & data
+				rates may apply. Message frequency varies.
+			</p>
+			<div class="text-center mt-3">
+				<button type="submit" class="btn btn-warning border">
+					Save
+				</button>
+			</div>
+		</div>
+		<div class="card p-3 shadow-sm mb-4">
+			<h4>Your Address</h4>
+			<h6 class="ms-5">Physical Address</h6>
+			<p>This is your current home address. If you receive mail at a PO Box or other address, enter your physical address here and add a mailing address below.</p>
+			<div class="row">
+				<div class="col-md-8 mb-3">
+					<label for="id_street_name">Street Adress:</label>
 					{{ form.street_name }}
 				</div>
-				<div class="col-md-3 mb-3">
-					<label for="id_city">City:</label>
-					{{ form.city }}
+				<div class="col-md-4 mb-3">
+					<label for="id_street_number">Apt, Unit, Suit, or Building:</label>
+					{{ form.street_number }}
 				</div>
-				<div class="col-md-3 mb-3">
-					<label for="id_zip_code">Zip Code:</label>
+				<div class="col-md-4 mb-3">
+					<label for="id_city">City</label>
+					{{ form.city }}
+				</div><div class="col-md-4 mb-3">
+					<label for="id_state">State</label>
+					{{ form.state }}
+				</div><div class="col-md-4 mb-3">
+					<label for="id_zip_code">Zip Code</label>
 					{{ form.zip_code }}
 				</div>
-				<div class="col-md-3 mb-3">
-					<label for="id_state">State:</label>
-					{{ form.state }}
-				</div>
 			</div>
-			 {% if profile_status != "approved" %}
-			<div class="row mb-4">
+			<div class="text-center mt-3">
+				<button type="submit" class="btn btn-warning border">Save</button>
+			</div>
+		</div>
+		{% if profile_status != "approved" %}
+		<div class="card p-3 shadow-sm mb-4">
+			<h4>ID Verification</h4>
+			<div class="row">
 				<div class="col-md-4 mb-3">
 					<label for="id_profile_image">Profile Image:</label>
 					<input
@@ -126,10 +163,11 @@
 					</div>
 				</div>
 			</div>
-			{% endif %}
-			<button type="submit" class="btn btn-primary">
-				{% if form.instance.pk %}Update{% else %}Add{% endif %}
-			</button>
+			<div class="text-center mt-3">
+				<button type="submit" class="btn btn-warning border">Save</button>
+			</div>
+		</div>
+		{% endif %}
 		</form>
 	</div>
 </section>
