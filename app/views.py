@@ -99,6 +99,7 @@ def dashboard(request):
     transaction = Transaction.objects.filter(user=user).last()
     vehicle = transaction.vehicle if transaction else None
     transaction_id = transaction.transaction_id if transaction else None
+    transaction_cancel = transaction.cancel if transaction else None
     
     context = {
         "user": user,
@@ -107,7 +108,8 @@ def dashboard(request):
         "dashboard": True,
         "from_signup": None,
         "profile_status": profile_status, 
-        "transaction_cancel": transaction.cancel
+        "transaction_cancel": transaction_cancel,
+        "header_color": "background-color: rgb(26, 43, 99) !important"
     }
     return render(request, "dashboard.html", context)
 
@@ -178,7 +180,7 @@ def add_or_update_profile(request):
             user_profile = form.save(commit=False)
             user_profile.user = request.user
             user_profile.save()
-            return redirect('add_or_update_profile')
+            return redirect('dashboard')
     else:
         form = UserProfileForm(instance=profile, user=request.user)
         
@@ -188,7 +190,7 @@ def add_or_update_profile(request):
     except UserProfile.DoesNotExist:
         profile_status = "pending"
 
-    return render(request, 'profile.html', {'form': form, "profile_status": profile_status})
+    return render(request, 'profile.html', {'form': form, "profile_status": profile_status, "header_color": "background-color: rgb(26, 43, 99) !important"})
 
 
 def verify_transaction(request, transaction_id):

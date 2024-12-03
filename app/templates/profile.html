@@ -32,9 +32,6 @@
 					{{ form.last_name }}
 				</div>
 			</div>
-			<div class="text-center mt-3">
-				<button type="submit" class="btn btn-warning border">Save</button>
-			</div>
 		</div>
 		<div class="card p-3 shadow-sm mb-4">
 			<h4>Phone Number</h4>
@@ -62,11 +59,6 @@
 				Policy. Reply STOP to opt-out or HELP for help. Message & data
 				rates may apply. Message frequency varies.
 			</p>
-			<div class="text-center mt-3">
-				<button type="submit" class="btn btn-warning border">
-					Save
-				</button>
-			</div>
 		</div>
 		<div class="card p-3 shadow-sm mb-4">
 			<h4>Your Address</h4>
@@ -91,9 +83,6 @@
 					<label for="id_zip_code">Zip Code</label>
 					{{ form.zip_code }}
 				</div>
-			</div>
-			<div class="text-center mt-3">
-				<button type="submit" class="btn btn-warning border">Save</button>
 			</div>
 		</div>
 		{% if profile_status != "approved" %}
@@ -163,12 +152,12 @@
 					</div>
 				</div>
 			</div>
-			<div class="text-center mt-3">
-				<button type="submit" class="btn btn-warning border">Save</button>
-			</div>
 		</div>
 		{% endif %}
-		</form>
+		<div class="text-center mt-3">
+			<button type="submit" class="btn btn-warning border btn-lg px-5">Save</button>
+		</div>
+	</form>
 	</div>
 </section>
 
