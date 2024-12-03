@@ -4,7 +4,7 @@
 
 <section class="py-5">
 	<div class="row justify-content-center">
-        {% if vehicle %}
+    	{% if not transaction_cancel %}
 		<div class="col-8">
 			<div class="d-flex justify-content-between align-items-center">
 				<h2 class="mb-3">
@@ -103,7 +103,7 @@
 		</div>
         {% else %}
         <div class="col-md-8">
-            <div class="row align-items-center mb-5">
+            {% comment %} <div class="row align-items-center mb-5">
                 <div class="col-md-10">
                     <h4>Selling</h4>
                     <p class="text-muted mb-0">
@@ -113,7 +113,7 @@
                 <div class="col-md-2 text-end">
                     <button class="btn btn-outline-warning mt-2" data-bs-toggle="modal" data-bs-target="#addVehicleModal">ADD VEHICLE</button>
                 </div>
-            </div>
+            </div> {% endcomment %}
             <div class="row align-items-center mb-4">
                 <div class="col-md-10">
                     <h4>Buying</h4>
@@ -122,7 +122,7 @@
                     </p>
                 </div>
                 <div class="col-md-2 text-end">
-                    <a href="{% url 'buy' %}" class="btn btn-outline-warning mt-2"
+                    <a href="{% url 'verify_transaction' transaction_id %}" class="btn btn-outline-warning mt-2"
                         >PAY NEW SELLER</a
                     >
                 </div>

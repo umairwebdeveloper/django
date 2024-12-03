@@ -96,7 +96,7 @@ def dashboard(request):
         profile_status = "pending"
     
     # Retrieve the latest non-canceled transaction for the user
-    transaction = Transaction.objects.filter(user=user, cancel=False).last()
+    transaction = Transaction.objects.filter(user=user).last()
     vehicle = transaction.vehicle if transaction else None
     transaction_id = transaction.transaction_id if transaction else None
     
@@ -106,7 +106,8 @@ def dashboard(request):
         "transaction_id": transaction_id,
         "dashboard": True,
         "from_signup": None,
-        "profile_status": profile_status
+        "profile_status": profile_status, 
+        "transaction_cancel": transaction.cancel
     }
     return render(request, "dashboard.html", context)
 
@@ -206,6 +207,8 @@ def verify_transaction(request, transaction_id):
     if request.method == "POST":
         entered_serial = request.POST.get("serial_number")
         if entered_serial == transaction.vehicle.serial_number:
+            transaction.cancel = False
+            transaction.save()
             return redirect(f"/details/{transaction.transaction_id}/")
         else:
             context["error"] = "*Invalid VIN entered"
@@ -216,6 +219,8 @@ def verify_transaction(request, transaction_id):
 
 def vehicle_details(request, transaction_id):
     transaction = get_object_or_404(Transaction, transaction_id=transaction_id)
+    if request.user.is_authenticated:
+        return redirect("dashboard")
 
     # if request.method == "POST":
     #     # Create user and send email
