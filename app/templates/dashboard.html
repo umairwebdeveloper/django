@@ -3,83 +3,192 @@
 {% block content %}
 
 <section class="py-5">
-    <div class="row justify-content-center">
-        <div class="col-8">
-            {% if not from_signup %}
-            <div class="row align-items-center mb-3">
+	<div class="row justify-content-center">
+        {% if vehicle %}
+		<div class="col-8">
+			<div class="d-flex justify-content-between align-items-center">
+				<h2 class="mb-3">
+					Hi, {{user.first_name}}
+					{{user.last_name}}
+				</h2>
+				<button class="btn btn-outline-secondary">
+					PAY NEW SELLER
+				</button>
+			</div>
+			<div class="card shadow-sm p-3">
+				<div class="d-flex justify-content-between align-items-center">
+					<h5 class="m-0">
+						{{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}
+					</h5>
+					<div class="text-decoration-underline">
+						{{ vehicle.formatted_price }}
+					</div>
+				</div>
+				<div
+					class="d-flex justify-content-between align-items-center mb-2"
+				>
+					<h6 class="m-0">{{vehicle.serial_number}}</h6>
+					<div class="text-decoration-underline">
+						<i class="fa-solid fa-calendar-days"></i> Temp permit
+					</div>
+				</div>
+				<p class="text-end">
+					Status: {% if profile_status != "approved" %}User needs to
+					verify his identity{% else %}Identity {{ profile_status }}{% endif %}
+				</p>
+				<div class="row">
+					<div class="col-md-4" style="border-right: 2px solid black">
+						<div class="d-flex align-items-center gap-2 my-3">
+							<span class="p-2 rounded-circle bg-primary d-flex" style='width: 36px; height:36px'>
+								<i class="fa-solid fa-lock fs-5 text-white" style='padding-left: 1px'></i>
+							</span>
+							<span>Payment</span>
+						</div>
+						<div class="d-flex align-items-center gap-2 my-5">
+							<span class="p-2 rounded-circle bg-primary d-flex" style='width: 36px; height:36px'>
+								<i class="fa-solid fa-lock fs-5 text-white" style='padding-left: 1px'></i>
+							</span>
+							<span>Docs</span>
+						</div>
+						<div class="d-flex align-items-center gap-2 my-3">
+							<span class="p-2 rounded-circle bg-primary d-flex" style='width: 36px; height:36px'>
+								<i class="fa-solid fa-lock fs-5 text-white" style='padding-left: 1px'></i>
+							</span>
+							<span>Transfer</span>
+						</div>
+					</div>
+					<div class="col-md-8">
+						{% if profile_status != "approved" %}
+						<p class="text-center">
+							We need to verify your identity. Click the button
+							below to begin
+						</p>
+						{% endif %}
+						<div class="text-center mb-3">
+							<button
+								class="btn btn-warning"
+								data-bs-toggle="modal"
+								data-bs-target="#userInfoModal"
+							>
+								USER INFORMATION
+							</button>
+						</div>
+						<div class="text-center">
+							<button
+								type="button"
+								class="btn btn-outline-danger"
+								data-bs-toggle="modal"
+								data-bs-target="#cancelModal"
+								data-transaction-id="{{ transaction_id }}"
+							>
+								CANCEL DEAL
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="d-flex justify-content-end gap-2">
+					{% if profile_status != "approved" %}
+					<a
+						href="{% url 'add_or_update_profile' %}"
+						class="btn btn-warning"
+						>VERIFY MY IDENTITY</a
+					>
+					{% else %}
+					<button class="btn btn-warning disabled" disabled>
+						IDENTITY VERIFIED
+					</button>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+        {% else %}
+        <div class="col-md-8">
+            <div class="row align-items-center mb-5">
                 <div class="col-md-10">
-                    <h2>Selling {{ profile_status }}</h2>
+                    <h4>Selling</h4>
                     <p class="text-muted mb-0">
                         To accept payment from a private buyer, add your vehicle.
                     </p>
                 </div>
                 <div class="col-md-2 text-end">
-                    <button class="btn btn-outline-secondary mt-2" data-bs-toggle="modal" data-bs-target="#addVehicleModal">ADD VEHICLE</button>
+                    <button class="btn btn-outline-warning mt-2" data-bs-toggle="modal" data-bs-target="#addVehicleModal">ADD VEHICLE</button>
                 </div>
             </div>
-            {% endif %}
-            <div class="d-flex justify-content-between align-items-center">
-                {% if from_signup %}
-                <h2 class="mb-3">Hi, {{user.first_name}} {{user.last_name}}</h2>
-                {% else %}
-                <h2 class="mb-3">Buying</h2>
-                {% endif %}
-                <button class="btn btn-outline-secondary">PAY NEW SELLER</button>
+            <div class="row align-items-center mb-4">
+                <div class="col-md-10">
+                    <h4>Buying</h4>
+                    <p class="text-muted mb-0">
+                        You don't have any buying history yet.
+                    </p>
+                </div>
+                <div class="col-md-2 text-end">
+                    <a href="{% url 'buy' %}" class="btn btn-outline-warning mt-2"
+                        >PAY NEW SELLER</a
+                    >
+                </div>
             </div>
-            <div class="card shadow-sm p-3">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="m-0">{{ vehicle.year }} {{ vehicle.make }} {{ vehicle.model }}</h5>
-                    <div class="text-decoration-underline">{{ vehicle.formatted_price }}</div>
-                </div>
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h6 class="m-0">{{vehicle.serial_number}}</h6>
-                    <div class="text-decoration-underline"><i class="fa-solid fa-calendar-days"></i> Temp permit</div>
-                </div>
-                <p class="text-end">Status: {% if profile_status == "pending" %}User needs to verify his identity{% else %}{{ profile_status }}{% endif %}</p>
-                <div class="row">
-                    <div class="col-md-4" style="border-right: 2px solid black;">
-                        <div class="d-flex align-items-center gap-2 my-3">
-                            <span class="p-2 rounded-circle bg-primary">
-                                <i class="fa-solid fa-lock fs-5 text-white"></i>
-                            </span>
-                            <span>Payment</span>
-                        </div>
-                        <div class="d-flex align-items-center gap-2 my-3">
-                            <span class="p-2 rounded-circle bg-primary">
-                                <i class="fa-solid fa-lock fs-5 text-white"></i>
-                            </span>
-                            <span>Docs</span>
-                        </div>
-                        <div class="d-flex align-items-center gap-2 my-3">
-                            <span class="p-2 rounded-circle bg-primary">
-                                <i class="fa-solid fa-lock fs-5 text-white"></i>
-                            </span>
-                            <span>Transfer</span>
-                        </div>
-                    </div>
-                    <div class="col-md-8">
-                        <p class="text-center">We need to verify your identity. Click the button below to begin</p>
-                        <div class="text-center mb-3">
-                            <button class="btn btn-warning">USER INFORMATION</button>
-                        </div>
-                        <div class="text-center">
-                            <button class="btn btn-outline-danger">CANCEL DEAL</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-end gap-2">
-                    <button class="btn btn-outline-secondary">PAYMENTS</button>
-                    {% if profile_status == "pending" %}
-                    <button class="btn btn-warning">VERIFY MY IDENTITY</button>
-                    {% else %}
-                    <button class="btn btn-warning disabled" disabled>VERIFIED</button>
-                    {% endif %}
+            <div class="row mt-4">
+                <div class="col-12">
+                    <p class="d-flex align-items-center">
+                        <i class="bi bi-share me-2"></i>
+                        <span
+                            >Found a car and want to pay with KeySavvy? Share this
+                            link with your seller.</span
+                        >
+                    </p>
                 </div>
             </div>
         </div>
-    </div>
+        {% endif %}
+	</div>
 </section>
-
+<!-- Bootstrap Modal -->
+<div
+	class="modal fade"
+	id="cancelModal"
+	tabindex="-1"
+	aria-labelledby="cancelModalLabel"
+	aria-hidden="true"
+>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="cancelModalLabel">
+					Confirm Cancellation
+				</h5>
+				<button
+					type="button"
+					class="btn-close"
+					data-bs-dismiss="modal"
+					aria-label="Close"
+				></button>
+			</div>
+			<div class="modal-body">
+				Are you sure you want to cancel this deal? This action cannot be
+				undone.
+			</div>
+			<div class="modal-footer">
+				<button
+					type="button"
+					class="btn btn-secondary"
+					data-bs-dismiss="modal"
+				>
+					Close
+				</button>
+				<form
+					class="d-inline inline"
+					action="{% url 'cancel_transaction' transaction_id %}"
+					method="POST"
+				>
+					{% csrf_token %}
+					<button type="submit" class="btn btn-danger">
+						Yes, Cancel
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 <div
 	class="modal fade"
 	id="addVehicleModal"
@@ -161,4 +270,124 @@
 		</div>
 	</div>
 </div>
+
+<!-- Updated Modal -->
+<div
+	class="modal fade"
+	id="userInfoModal"
+	tabindex="-1"
+	aria-labelledby="userInfoModalLabel"
+	aria-hidden="true"
+>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="userInfoModalLabel">
+					Enter Contact Info
+				</h5>
+				<button
+					type="button"
+					class="btn-close"
+					data-bs-dismiss="modal"
+					aria-label="Close"
+				></button>
+			</div>
+			<form id="editUserForm">
+				<div class="modal-body">
+					<div class="mb-3">
+						<label for="firstName" class="form-label"
+							>First Name</label
+						>
+						<input
+							type="text"
+							class="form-control"
+							id="firstName"
+							name="first_name"
+							value="{{ user.first_name }}"
+						/>
+					</div>
+					<div class="mb-3">
+						<label for="lastName" class="form-label"
+							>Last Name</label
+						>
+						<input
+							type="text"
+							class="form-control"
+							id="lastName"
+							name="last_name"
+							value="{{ user.last_name }}"
+						/>
+					</div>
+					<div class="mb-3">
+						<label for="phoneNumber" class="form-label"
+							>Phone Number</label
+						>
+						<input
+							type="text"
+							class="form-control"
+							id="phoneNumber"
+							name="phone_number"
+							value="{{ user.phone_number.number }}"
+						/>
+					</div>
+					<div class="mb-3">
+						<label for="email" class="form-label">Email</label>
+						<input
+							type="email"
+							class="form-control disabled"
+							id="email"
+							name="email"
+							value="{{ user.email }}"
+							disabled
+							readonly
+						/>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button
+						type="button"
+						class="btn btn-secondary"
+						data-bs-dismiss="modal"
+					>
+						Close
+					</button>
+					<button type="submit" class="btn btn-warning">
+						Save changes
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+	$(document).ready(function () {
+		$("#editUserForm").on("submit", function (e) {
+			e.preventDefault();
+			const formData = $(this).serialize();
+			const csrfToken = "{{ csrf_token }}";
+			$.ajax({
+				url: "{% url 'update_phone_number' %}",
+				type: "POST",
+				data: formData,
+				headers: {
+					"X-CSRFToken": csrfToken,
+				},
+				success: function (response) {
+					if (response.success) {
+						alert("User information updated successfully!");
+						location.reload(); // Reload the page to reflect changes
+					} else {
+						alert("An error occurred. Please try again.");
+					}
+				},
+				error: function (xhr, status, error) {
+					console.error("Error:", error);
+					alert(
+						"Failed to update user information. Please try again."
+					);
+				},
+			});
+		});
+	});
+</script>
 {% endblock %}

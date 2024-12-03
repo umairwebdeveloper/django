@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
-from .models import UserProfile
+from .models import UserProfile, PhoneNumber
 from django.contrib.auth.password_validation import validate_password
 import mimetypes
 
@@ -85,11 +85,10 @@ class StartUserForm(forms.ModelForm):
             user.save()
         return user
 
-
 class UserProfileForm(forms.ModelForm):
     email = forms.EmailField(
         required=True,
-        widget=forms.EmailInput(attrs={'class': 'form-control', 'readonly': 'readonly'})
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'disabled': 'disabled' })
     )
     first_name = forms.CharField(
         max_length=150,
@@ -98,6 +97,11 @@ class UserProfileForm(forms.ModelForm):
     )
     last_name = forms.CharField(
         max_length=150,
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+    phone_number = forms.CharField(
+        max_length=15,
         required=False,
         widget=forms.TextInput(attrs={'class': 'form-control'})
     )
@@ -132,14 +136,29 @@ class UserProfileForm(forms.ModelForm):
             self.fields['email'].initial = user.email
             self.fields['first_name'].initial = user.first_name
             self.fields['last_name'].initial = user.last_name
+            if hasattr(user, 'phone_number'):
+                self.fields['phone_number'].initial = user.phone_number.number
+        
+        # Check the status of the profile and remove image upload fields if approved
+        if self.instance.status == 'approved':
+            for field in ['profile_image', 'id_card_front', 'id_card_back']:
+                if field in self.fields:
+                    self.fields.pop(field)
 
     def save(self, commit=True):
         # Save user fields first
         user = self.instance.user
-        user.first_name = self.cleaned_data['first_name']
-        user.last_name = self.cleaned_data['last_name']
+        user.first_name = self.cleaned_data.get('first_name', user.first_name)
+        user.last_name = self.cleaned_data.get('last_name', user.last_name)
         if commit:
             user.save()
+        phone_number = self.cleaned_data.get('phone_number')
+        if hasattr(user, 'phone_number'):
+            user.phone_number.number = phone_number
+            user.phone_number.save()
+        else:
+            PhoneNumber.objects.create(user=user, number=phone_number)
+        
         return super().save(commit)
 
     def clean_profile_image(self):

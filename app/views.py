@@ -1,7 +1,6 @@
-from django.conf import settings
 from django.contrib.auth import authenticate, login as auth_login
 from django.urls import reverse
-from .utils import generate_secure_password, load_json_file, send_email
+from .utils import load_json_file, send_email
 from .forms import LoginForm, StartUserForm
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile, Transaction, Vehicle
@@ -9,7 +8,9 @@ from .forms import UserProfileForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404, HttpResponseRedirect
 from django.contrib import messages
-from django.core.exceptions import ValidationError
+from django.http import JsonResponse
+from django.http import HttpResponseForbidden
+
 
 def login(request):
     if request.user.is_authenticated:
@@ -84,37 +85,30 @@ def register(request, transaction_id):
     }
     return render(request, "register.html", context)
 
-@login_required(login_url="auth")
-def dashboard_2(request):
-    try:
-        profile = request.user.profile
-        is_profile_complete = all([
-            profile.profile_image,
-            profile.id_card_front,
-            profile.id_card_back
-        ])
-    except UserProfile.DoesNotExist:
-        is_profile_complete = False
-    
-    context = {
-        "header_color": "background-color: rgb(26, 43, 99) !important",
-        "is_profile_complete": is_profile_complete 
-    }
-    return render(request, "dashboard_2.html", context)
 
 @login_required(login_url="auth")
 def dashboard(request):
     user = request.user
-    from_signup = request.GET.get('from_signup', None)
     try:
         profile = request.user.profile
         profile_status = profile.status
     except UserProfile.DoesNotExist:
         profile_status = "pending"
     
-    vehicle = Vehicle.objects.filter(transaction__user=user).first()
-    context = {"user":user, "vehicle": vehicle, "dashboard": True, "from_signup":from_signup, "profile_status": profile_status}
-    return render(request,"dashboard.html", context)
+    # Retrieve the latest non-canceled transaction for the user
+    transaction = Transaction.objects.filter(user=user, cancel=False).last()
+    vehicle = transaction.vehicle if transaction else None
+    transaction_id = transaction.transaction_id if transaction else None
+    
+    context = {
+        "user": user,
+        "vehicle": vehicle,
+        "transaction_id": transaction_id,
+        "dashboard": True,
+        "from_signup": None,
+        "profile_status": profile_status
+    }
+    return render(request, "dashboard.html", context)
 
 def home(request):
     faq_data = load_json_file('app/faq_data/home.json')
@@ -186,58 +180,15 @@ def add_or_update_profile(request):
             return redirect('add_or_update_profile')
     else:
         form = UserProfileForm(instance=profile, user=request.user)
+        
+    try:
+        u_profile = request.user.profile
+        profile_status = u_profile.status
+    except UserProfile.DoesNotExist:
+        profile_status = "pending"
 
-    return render(request, 'profile.html', {'form': form})
+    return render(request, 'profile.html', {'form': form, "profile_status": profile_status})
 
-
-def user_login(request):
-    if request.method == "POST":
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
-            if user: 
-                auth_login(request, user)  
-                return redirect('dashboard') 
-            else:
-                form.add_error(None, "Invalid username or password.")
-        else:
-            form.add_error(None, "Please correct the errors below.")
-    return redirect('auth')
-
-def start_user_form(request):
-    if request.method == "POST":
-        form = StartUserForm(request.POST)
-        if form.is_valid():
-            try:
-                form.save()
-                email = form.cleaned_data['email']
-                password = form.cleaned_data['password']
-                print(email, password)
-                user = authenticate(request, email=email, password=password)
-
-                if user:
-                    auth_login(request, user)
-                    subject = 'Welcome to KeySavvy! We are your partner in private party vehicle sales.'
-                    recipient_list = [user.email]
-                    template_path = 'emails/wellcome.html'
-                    context = {
-                        "user_email": user.email,
-                        "user_name": user.username,
-                        "user_password": password, 
-                        "first_name": user.first_name,
-                        "last_name": user.last_name
-                    }
-                    send_email(subject, recipient_list, template_path, context)
-                    messages.success(request, "User updated successfully!")
-                    return redirect(request.META.get('HTTP_REFERER', 'default_redirect_url'))
-            except ValidationError as e:
-                print(123123123, e)
-                messages.error(request, f"Error: {e.message}")
-        else:
-            print(242)
-    return redirect(request.META.get('HTTP_REFERER', 'default_redirect_url'))
 
 def verify_transaction(request, transaction_id):
     """
@@ -287,3 +238,30 @@ def vehicle_details(request, transaction_id):
     #     return redirect("auth")
 
     return render(request, "vehicle_details.html", {"transaction": transaction, "header_color": "background-color: rgb(26, 43, 99) !important"})
+
+
+@login_required
+def update_phone_number(request):
+    if request.method == "POST":
+        user = request.user
+        user.first_name = request.POST.get("first_name", user.first_name)
+        user.last_name = request.POST.get("last_name", user.last_name)
+        user.save()
+
+        phone_number = request.POST.get("phone_number", user.phone_number.number)
+        user.phone_number.number = phone_number
+        user.phone_number.save()
+
+        return JsonResponse({"success": True})
+    return JsonResponse({"success": False}, status=400)
+
+@login_required
+def cancel_transaction(request, transaction_id):
+    if request.method == "POST":
+        transaction = get_object_or_404(Transaction, transaction_id=transaction_id, user=request.user)
+        if transaction.cancel:
+            return HttpResponseForbidden("Transaction already canceled.")
+        transaction.cancel = True
+        transaction.save()
+        return redirect('dashboard')
+    return HttpResponseForbidden("Invalid request method.")

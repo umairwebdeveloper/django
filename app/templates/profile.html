@@ -5,13 +5,14 @@
 			{% if form.instance.pk %}Update Your Profile{% else %}Add Your
 			Profile{% endif %}
 		</h2>
+		{% if request.user.profile.status != "approved" %}
 		<p class="text-center">
 			Your submission is under review. Please wait for admin approval.
 		</p>
+		{% endif %}
 		<h4 class="text-center">
-			Status:
 			<span class="text-warning text-capitalize"
-				>{{request.user.profile.status}}</span
+				>Identity verification {{request.user.profile.status}}</span
 			>
 		</h4>
 
@@ -40,6 +41,10 @@
 					{{ form.email }}
 				</div>
 				<div class="col-md-3 mb-3">
+					<label for="id_phone_number">Phone Number:</label>
+					{{ form.phone_number }}
+				</div>
+				<div class="col-md-3 mb-3">
 					<label for="id_street_name">Street Name:</label>
 					{{ form.street_name }}
 				</div>
@@ -56,6 +61,7 @@
 					{{ form.state }}
 				</div>
 			</div>
+			 {% if profile_status != "approved" %}
 			<div class="row mb-4">
 				<div class="col-md-4 mb-3">
 					<label for="id_profile_image">Profile Image:</label>
@@ -65,6 +71,7 @@
 						name="profile_image"
 						onchange="previewImage(event, 'profileImagePreview')"
 						class="form-control"
+						accept="image/*"
 					/>
 					<div class="mt-2">
 						<img
@@ -119,6 +126,7 @@
 					</div>
 				</div>
 			</div>
+			{% endif %}
 			<button type="submit" class="btn btn-primary">
 				{% if form.instance.pk %}Update{% else %}Add{% endif %}
 			</button>

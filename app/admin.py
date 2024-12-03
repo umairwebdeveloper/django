@@ -1,7 +1,7 @@
 # admin.py
 from django.conf import settings
 from django.contrib import admin
-from .models import UserProfile
+from .models import UserProfile, PhoneNumber
 from django.utils.html import format_html
 
 class ImageAdmin(admin.ModelAdmin):
@@ -39,6 +39,7 @@ from django.core.mail import send_mail
 from .models import Vehicle, Transaction
 
 admin.site.register(Vehicle)
+admin.site.register(PhoneNumber)
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
