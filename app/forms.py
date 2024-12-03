@@ -87,41 +87,48 @@ class StartUserForm(forms.ModelForm):
 
 
 class UserProfileForm(forms.ModelForm):
-    username = forms.CharField(
-        max_length=150, 
-        required=True, 
-        widget=forms.TextInput(attrs={'class': 'form-control'})
-    )
     email = forms.EmailField(
-        required=True, 
-        widget=forms.EmailInput(attrs={'class': 'form-control'})
+        required=True,
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'readonly': 'readonly'})
     )
     first_name = forms.CharField(
-        max_length=150, 
-        required=False, 
+        max_length=150,
+        required=False,
         widget=forms.TextInput(attrs={'class': 'form-control'})
     )
     last_name = forms.CharField(
-        max_length=150, 
-        required=False, 
+        max_length=150,
+        required=False,
         widget=forms.TextInput(attrs={'class': 'form-control'})
     )
 
     class Meta:
         model = UserProfile
-        fields = ['profile_image', 'id_card_front', 'id_card_back']
+        fields = [
+            'profile_image',
+            'id_card_front',
+            'id_card_back',
+            'street_name',
+            'street_number',
+            'city',
+            'zip_code',
+            'state',
+        ]
         widgets = {
             'profile_image': forms.ClearableFileInput(attrs={'class': 'form-control'}),
             'id_card_front': forms.ClearableFileInput(attrs={'class': 'form-control'}),
             'id_card_back': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'street_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'street_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'city': forms.TextInput(attrs={'class': 'form-control'}),
+            'zip_code': forms.TextInput(attrs={'class': 'form-control'}),
+            'state': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)  # Get the user instance
         super().__init__(*args, **kwargs)
         if user:
-            # Populate user fields with initial data
-            self.fields['username'].initial = user.username
             self.fields['email'].initial = user.email
             self.fields['first_name'].initial = user.first_name
             self.fields['last_name'].initial = user.last_name
@@ -129,8 +136,6 @@ class UserProfileForm(forms.ModelForm):
     def save(self, commit=True):
         # Save user fields first
         user = self.instance.user
-        user.username = self.cleaned_data['username']
-        user.email = self.cleaned_data['email']
         user.first_name = self.cleaned_data['first_name']
         user.last_name = self.cleaned_data['last_name']
         if commit:
@@ -158,6 +163,7 @@ class UserProfileForm(forms.ModelForm):
             if not mime_type or not mime_type.startswith('image'):
                 raise ValidationError(f"{field_name} must be a valid image file.")
         return image
+
     
 from django.utils.crypto import get_random_string
 

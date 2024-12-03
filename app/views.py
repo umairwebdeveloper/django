@@ -1,12 +1,13 @@
 from django.conf import settings
 from django.contrib.auth import authenticate, login as auth_login
+from django.urls import reverse
 from .utils import generate_secure_password, load_json_file, send_email
 from .forms import LoginForm, StartUserForm
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile, Transaction, Vehicle
 from .forms import UserProfileForm
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 
@@ -43,12 +44,9 @@ def register(request, transaction_id):
     transaction_email = transaction.user.email
     user_instance = transaction.user  # Get the user instance from the transaction
 
-
     if not transaction_email:
         raise Http404("Associated email not found for the transaction.")
 
-    # if request.user.is_authenticated:
-    #     return redirect("dashboard")
     errors = None
     if request.method == 'POST':
         form = StartUserForm(request.POST, user_instance=user_instance)
@@ -56,24 +54,26 @@ def register(request, transaction_id):
             try:
                 user = form.save()
                 password = form.cleaned_data['password']
-                messages.success(request, "User updated successfully.")
+                # Automatically log in the user
+                auth_login(request, user)
+
+                messages.success(request, "User registered and logged in successfully.")
                 subject = 'Welcome to KeySavvy! We are your partner in private party vehicle sales.'
                 recipient_list = [user.email]
                 template_path = 'emails/wellcome.html'
                 context = {
                     "user_email": user.email,
-                    "user_password": password, 
+                    "user_password": password,
                     "first_name": user.first_name,
-                    "last_name": user.last_name
+                    "last_name": user.last_name,
                 }
                 send_email(subject, recipient_list, template_path, context)
-                return redirect('auth')  # Redirect to a suitable page
+                return HttpResponseRedirect(f"{reverse('dashboard')}?from_signup=true")
             except Exception as e:
                 messages.error(request, f"Error saving form: {str(e)}")
         else:
             errors = form.errors
             messages.error(request, "Please correct the errors below.")
-
     else:
         form = StartUserForm(user_instance=user_instance)
 
@@ -105,10 +105,15 @@ def dashboard_2(request):
 @login_required(login_url="auth")
 def dashboard(request):
     user = request.user
-
-    vehicle = Vehicle.objects.filter(transaction__user=user).first()
-    context = {"user":user, "vehicle": vehicle}
+    from_signup = request.GET.get('from_signup', None)
+    try:
+        profile = request.user.profile
+        profile_status = profile.status
+    except UserProfile.DoesNotExist:
+        profile_status = "pending"
     
+    vehicle = Vehicle.objects.filter(transaction__user=user).first()
+    context = {"user":user, "vehicle": vehicle, "dashboard": True, "from_signup":from_signup, "profile_status": profile_status}
     return render(request,"dashboard.html", context)
 
 def home(request):
@@ -153,6 +158,12 @@ def blog(request):
     }
     return render(request, 'blog.html', context)
 
+def trust(request):
+    context = {
+        "header_color": "background-color: rgb(26, 43, 99) !important"
+    }
+    return render(request, 'trust.html', context)
+
 def contact(request):
     context = {
         "header_color": "background-color: rgb(26, 43, 99) !important"
@@ -162,24 +173,20 @@ def contact(request):
 @login_required(login_url="auth")
 def add_or_update_profile(request):
     try:
-        profile = request.user.profile
-        if request.method == 'POST':
-            form = UserProfileForm(request.POST, request.FILES, instance=profile, user=request.user)
-            if form.is_valid():
-                form.save()
-                return redirect('add_or_update_profile')
-        else:
-            form = UserProfileForm(instance=profile, user=request.user)
+        profile, created = UserProfile.objects.get_or_create(user=request.user)
     except UserProfile.DoesNotExist:
-        if request.method == 'POST':
-            form = UserProfileForm(request.POST, request.FILES, user=request.user)
-            if form.is_valid():
-                user_profile = form.save(commit=False)
-                user_profile.user = request.user
-                user_profile.save()
-                return redirect('add_or_update_profile')
-        else:
-            form = UserProfileForm(user=request.user)
+        profile = None
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, request.FILES, instance=profile, user=request.user)
+        if form.is_valid():
+            user_profile = form.save(commit=False)
+            user_profile.user = request.user
+            user_profile.save()
+            return redirect('add_or_update_profile')
+    else:
+        form = UserProfileForm(instance=profile, user=request.user)
+
     return render(request, 'profile.html', {'form': form})
 
 

@@ -15,6 +15,11 @@ class UserProfile(models.Model):
     id_card_front = models.ImageField(upload_to='id_cards/front/', max_length=1000)
     id_card_back = models.ImageField(upload_to='id_cards/back/', max_length=1000)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    street_name = models.CharField(max_length=150, null=True, blank=True)
+    street_number = models.CharField(max_length=150, null=True, blank=True)
+    city = models.CharField(max_length=150, null=True, blank=True)
+    zip_code = models.CharField(max_length=150, null=True, blank=True)
+    state = models.CharField(max_length=150, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

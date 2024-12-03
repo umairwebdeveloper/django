@@ -11,6 +11,7 @@ urlpatterns = [
     path('buy/', views.buy, name='buy'),
     path('sell/', views.sell, name='sell'),
     path('auth/', views.login, name='auth'),
+    path('trust/', views.trust, name='trust'),
     path('auth_id/<str:transaction_id>/', views.register, name='transaction_auth'),
     path('blog/', views.blog, name='blog'),
     path('contact/', views.contact, name='contact'),
