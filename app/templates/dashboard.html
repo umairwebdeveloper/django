@@ -42,7 +42,7 @@
 							<span class="p-2 rounded-circle bg-primary d-flex" style='width: 36px; height:36px'>
 								<i class="fa-solid fa-lock fs-5 text-white" style='padding-left: 1px'></i>
 							</span>
-							<span>Payment</span>
+							<span>PAYMENT</span>
 						</div>
 						<div class="d-flex align-items-center gap-2 my-5">
 							<span class="p-2 rounded-circle bg-primary d-flex" style='width: 36px; height:36px'>
@@ -73,7 +73,7 @@
 								USER INFORMATION
 							</button>
 						</div>
-						<div class="text-center">
+						<div class="text-center mt-4">
 							<button
 								type="button"
 								class="btn btn-outline-danger"
@@ -87,12 +87,15 @@
 					</div>
 				</div>
 				<div class="d-flex justify-content-end gap-2">
-					{% if profile_status != "approved" %}
 					<a
-						href="{% url 'add_or_update_profile' %}"
-						class="btn btn-warning"
-						>VERIFY MY IDENTITY</a
+						href="{% url 'payment' %}"
+						class="btn btn-outline-secondary me-2"
+						>PAYMENT</a
 					>
+					{% if profile_status != "approved" %}
+					<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#verificationModal">
+							VERIFY MY IDENTITY
+					</button>
 					{% else %}
 					<button class="btn btn-warning disabled" disabled>
 						IDENTITY VERIFIED
@@ -142,6 +145,45 @@
         {% endif %}
 	</div>
 </section>
+
+  <div class="modal fade" id="verificationModal" tabindex="-1" aria-labelledby="verificationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <div class="mb-4">
+            <img src="/static/images/keysavvy_stripe.png"  alt="Icon" width="120px" class="img-fluid">
+          </div>
+          <h5 class="fw-bold mb-3">KeySavvy, Inc. works with Stripe to verify your identity</h5>
+          <ul class="list-unstyled text-start mb-4">
+            <li class="mb-3">
+              <i class="bi bi-card-image me-2"></i>
+              You'll scan a valid <a href="#" class="text-decoration-none text-dark">photo ID</a>, then take a selfie to make sure it's yours.
+            </li>
+            <li class="mb-3">
+              <i class="bi bi-shield-check me-2"></i>
+              KeySavvy, Inc. will only have access to this <a href="#" class="text-decoration-none text-dark">verification data</a>.
+            </li>
+            <li>
+              <i class="bi bi-fingerprint me-2"></i>
+              Stripe uses biometric technology on your images to <a href="#" class="text-decoration-none text-dark">make sure it's you</a>. You can delete your data at any time.
+            </li>
+          </ul>
+          <div class="text-muted small mb-3">
+            <a href="#" class="text-decoration-none text-dark">KeySavvy, Inc. Privacy Policy</a> | 
+            <a href="#" class="text-decoration-none text-dark">Stripe Privacy Policy</a> | 
+            <a href="#" class="text-decoration-none text-dark">English (United States)</a>
+          </div>
+          <div class="d-grid gap-2">
+            <a href="{% url 'add_or_update_profile' %}" type="button" class="btn btn-warning">Agree and continue</a>
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Decline</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 <!-- Bootstrap Modal -->
 <div
 	class="modal fade"
@@ -359,6 +401,12 @@
 		</div>
 	</div>
 </div>
+<section class="faq py-5">
+	<div class="container">
+		<h2 class="text-center mb-4">Frequently Asked Questions</h2>
+		{% include "components/faqs.html" with comp_faq_data=faq_data comp_faq_number="1" %}
+	</div>
+</section>
 <script>
 	$(document).ready(function () {
 		$("#editUserForm").on("submit", function (e) {

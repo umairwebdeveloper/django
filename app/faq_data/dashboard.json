@@ -1,0 +1,22 @@
+[
+	{
+		"question": "Is linking a bank account required?",
+		"answer": "You do not have to link a bank account if you plan to pay using a wire transfer, credit card, or Zelle. There is an ACH limit of $50,000."
+	},
+	{
+		"question": "Is identity verification required to use KeySavvy?",
+		"answer": "Yes, identity verification helps us protect users from fraudulent transactions and is required to use KeySavvy. If a vehicle has multiple owners, all owners will need to sign up and verify their identity with KeySavvy."
+	},
+	{
+		"question": "When will I be able to pay?",
+		"answer": "You'll be able to pay after we've verified your seller's ownership and you've completed your account. You'll get an email when we unlock payment."
+	},
+	{
+		"question": "How long does it take to review my transaction?",
+		"answer": "We ask sellers to upload a photo of their registration and title (if they have it) and verify their identity. Once this is provided, verification is usually completed within 30 minutes during business hours. However, if a vehicle has multiple owners, is owned by a business, or we require additional documentation to verify title status, verification can take longer."
+	},
+	{
+		"question": "When can I pick up the vehicle?",
+		"answer": "After we verify your payment and approve transfer, you can meet with your seller to pick up the vehicle. You and your seller can decide whether to wait until we receive the title."
+	}
+]

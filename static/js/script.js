@@ -1,35 +1,37 @@
 // testimonials
 $(document).ready(function () {
+	const link_t =
+		"https://www.google.com/search?q=keysavvy&sca_esv=f29961f6c43f873e&sxsrf=ADLYWIJSWyeWlqt3sBii7lzORef5ohPl6Q%3A1733249326165&ei=LklPZ5XcCa2y5NoPipOM8AE&ved=0ahUKEwiVq5LzmIyKAxUtGVkFHYoJAx4Q4dUDCA8&uact=5&oq=keysavvy&gs_lp=Egxnd3Mtd2l6LXNlcnAiCGtleXNhdnZ5MgoQIxiABBgnGIoFMgoQIxiABBgnGIoFMgoQIxiABBgnGIoFMgUQABiABDILEC4YgAQY0QMYxwEyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABEjnCFDvBVjrBnACeAGQAQCYAdsBoAGoA6oBAzItMrgBA8gBAPgBAZgCA6AC6AHCAgoQABiwAxjWBBhHwgINEAAYgAQYsAMYQxiKBZgDAIgGAZAGCZIHBTIuMC4xoAfPEw&sclient=gws-wiz-serp#lrd=0xa14cd70c5c21a7:0x89304323533f102f,1,,,,";
 	const testimonials = [
 		{
 			text: "Absolutely amazing experience selling the car through KeySavvy. They are an A+ team. I cannot think of any better service.",
 			author: "Mash, Nissan Leaf",
-			link: "https://google.com",
+			link: link_t,
 		},
 		{
 			text: "KeySavvy made the process smooth and easy. Highly recommend their services!",
 			author: "John, Tesla Model 3",
-			link: "https://google.com",
+			link: link_t,
 		},
 		{
 			text: "Selling my car was hassle-free and convenient. Great service!",
 			author: "Anna, Ford Focus",
-			link: "https://google.com",
+			link: link_t,
 		},
 		{
 			text: "Professional, efficient, and trustworthy. Highly recommended!",
 			author: "Mark, BMW X5",
-			link: "https://google.com",
+			link: link_t,
 		},
 		{
 			text: "Great team and fantastic service!",
 			author: "Lucy, Audi A4",
-			link: "https://google.com",
+			link: link_t,
 		},
 		{
 			text: "Effortless and transparent experience. Would use again!",
 			author: "James, Honda Civic",
-			link: "https://google.com",
+			link: link_t,
 		},
 	];
 

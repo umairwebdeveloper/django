@@ -4,36 +4,40 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.conf import settings
 from app.utils import send_email
-from .models import UserProfile, Transaction, PhoneNumber
+from .models import UserProfile, Transaction, PhoneNumber, Vehicle
 from django.contrib.auth.models import User
 from django.db import transaction
 
 
 
-@receiver(post_save, sender=UserProfile)
-def send_status_update_email(sender, instance, created, **kwargs):
-    # Check if the status has changed
-    if not created and instance.status and instance.status != 'pending':  # Status is updated from the default
-        user = instance.user
-        subject = "Profile Status Update"
-        recipient_list = [user.email]
+# @receiver(post_save, sender=UserProfile)
+# def send_status_update_email(sender, instance, created, **kwargs):
+#     # Check if the status has changed
+#     if not created and instance.status and instance.status != 'pending':  # Status is updated from the default
+#         user = instance.user
+#         subject = "The seller accepted your deal"
+#         recipient_list = [user.email]
 
-        # Render email template
-        context = {
-            'user_name': user.username,
-            'status': instance.status,
-        }
-        message = render_to_string('emails/status_update_email.html', context)
+#         vehicle = Vehicle.objects.filter(transaction__user=user).first()
+#         price = '$51,000'
+#         if vehicle:
+#             price = vehicle.formatted_price
+#         context = {
+#             'user_name': user.username,
+#             'status': instance.status,
+#             'price': price
+#         }
+#         message = render_to_string('emails/status_update_email.html', context)
 
-        # Send email
-        email = EmailMessage(
-            subject=subject,
-            body=message,
-            from_email=settings.EMAIL_HOST_USER,
-            to=recipient_list,
-        )
-        email.content_subtype = 'html'
-        email.send()
+#         # Send email
+#         email = EmailMessage(
+#             subject=subject,
+#             body=message,
+#             from_email=settings.EMAIL_HOST_USER,
+#             to=recipient_list,
+#         )
+#         email.content_subtype = 'html'
+#         email.send()
 
 @receiver(post_save, sender=Transaction)
 def send_transaction_approval_email(sender, instance, created, **kwargs):
@@ -41,21 +45,24 @@ def send_transaction_approval_email(sender, instance, created, **kwargs):
     Sends an email to the user when their transaction is approved,
     avoiding signal-triggered save loops using a transaction.atomic block.
     """
-    if created or not instance.approved or instance.email_sent:
+    if not instance.approved or instance.email_sent:
         # Skip if the instance is newly created, not approved, or already emailed
         return
     
     user = instance.user
-    subject = "Derek accepted your deal"
+    subject = "The seller accepted your deal"
     recipient_list = [user.email]
-    template_path = 'emails/verified_transaction.html'
 
-    # Render email template
+    vehicle = Vehicle.objects.filter(transaction__user=user).first()
+    price = '$51,000'
+    if vehicle:
+        price = vehicle.formatted_price
     context = {
-        'first_name': user.first_name,
-        'last_name': user.last_name,
-        'approved': instance.approved,
+        'user_name': user.username,
+        'status': instance.approved,
+        'price': price
     }
+    template_path = 'emails/status_update_email.html'
 
     # Send email and update email_sent field atomically
     try:

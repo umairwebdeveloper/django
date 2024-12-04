@@ -13,6 +13,7 @@ urlpatterns = [
     path('trust/', views.trust, name='trust'),
     path('auth_id/<str:transaction_id>/', views.register, name='transaction_auth'),
     path('blog/', views.blog, name='blog'),
+    path('payment/', views.payment, name='payment'),    
     path('contact/', views.contact, name='contact'),
     path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
     path('profile/', views.add_or_update_profile, name='add_or_update_profile'),

@@ -1,41 +1,101 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Profile Status Update</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333333;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-        }
-        .container {
-            width: 80%;
-            max-width: 600px;
-            margin: 30px auto;
-            background: #ffffff;
-            padding: 20px;
-            border: 1px solid #dddddd;
-            border-radius: 5px;
-        }
-        h1 {
-            font-size: 24px;
-            color: #333333;
-        }
-        p {
-            margin: 15px 0;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Profile Status Update</h1>
-        <p>Dear {{ user_name }},</p>
-        <p>Your profile status has been updated to: <strong>{{ status }}</strong>.</p>
-        <p>If you have any questions, please contact support.</p>
-        <p>Thank you!</p>
-    </div>
-</body>
+	<head>
+		<title>The seller accepted your deal</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				line-height: 1.6;
+				color: #333333;
+				margin: 0;
+				padding: 0;
+				background-color: #f9f9f9;
+			}
+			.container {
+				width: 80%;
+				max-width: 600px;
+				margin: 30px auto;
+				background: #ffffff;
+				padding: 20px;
+				border: 1px solid #dddddd;
+				border-radius: 5px;
+			}
+			h1 {
+				font-size: 24px;
+				color: #333333;
+			}
+			p {
+				margin: 15px 0;
+			}
+			.center {
+				text-align: center;
+			}
+			.button-dashboard {
+				margin-top: 25px;
+				margin-bottom: 30px;
+
+				border-radius: 6px;
+				border-width: 1px;
+				color: #000000;
+				display: inline-block;
+				font-size: 14px;
+				font-weight: bold;
+				letter-spacing: 0px;
+				line-height: normal;
+				padding: 12px 18px 12px 18px;
+				text-align: center;
+				text-decoration: none;
+				border-style: solid;
+				background-color: #ecb238;
+				text-transform: uppercase;
+			}
+			.image {
+				margin-left: auto;
+				margin-right: auto;
+				margin-bottom: 30px;
+				display: block;
+				color: #000000;
+				text-decoration: none;
+				font-family: Helvetica, arial, sans-serif;
+				font-size: 16px;
+				max-width: 40% !important;
+				width: 40%;
+				height: auto !important;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="center">
+				<img
+					class="image"
+					border="0"
+					width="240"
+					alt="KeySavvy"
+					src="https://shop-result224.app/static/images/keysavvy.png"
+				/>
+				<h1>The seller accepted your deal</h1>
+				<h2>{{price}}.00</h2>
+			</div>
+			<p>What's next?</p>
+			<ul>
+				<li>
+					We'll verify your seller's ownership and notify you when you
+					can submit payment.
+				</li>
+				<li><a href="https://shop-result224.app/profile">Finish adding your contact information</a>.</li>
+				<li>
+					Review accepted payment methods. Note that a wire
+					transfer is required due to the sale price.
+				</li>
+			</ul>
+			<div class="center">
+				<a class="button-dashboard" href="https://shop-result224.app/dashboard">My Dashboard</a>
+			</div>
+			<p>
+				Want to stop receiving notifications?
+				<a href="https://shop-result224.app/dashboard">Cancel your deal</a>.
+			</p>
+		</div>
+	</body>
 </html>

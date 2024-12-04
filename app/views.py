@@ -100,6 +100,7 @@ def dashboard(request):
     vehicle = transaction.vehicle if transaction else None
     transaction_id = transaction.transaction_id if transaction else None
     transaction_cancel = transaction.cancel if transaction else None
+    faq_data = load_json_file('app/faq_data/dashboard.json')
     
     context = {
         "user": user,
@@ -109,7 +110,8 @@ def dashboard(request):
         "from_signup": None,
         "profile_status": profile_status, 
         "transaction_cancel": transaction_cancel,
-        "header_color": "background-color: rgb(26, 43, 99) !important"
+        "header_color": "background-color: rgb(26, 43, 99) !important",
+        "faq_data": faq_data
     }
     return render(request, "dashboard.html", context)
 
@@ -155,6 +157,12 @@ def blog(request):
     }
     return render(request, 'blog.html', context)
 
+def payment(request):
+    context = {
+        "header_color": "background-color: rgb(26, 43, 99) !important"
+    }
+    return render(request, 'payment.html', context)
+
 def trust(request):
     context = {
         "header_color": "background-color: rgb(26, 43, 99) !important"
@@ -180,6 +188,7 @@ def add_or_update_profile(request):
             user_profile = form.save(commit=False)
             user_profile.user = request.user
             user_profile.save()
+            messages.success(request, "Thank you for submitting your documents. We will get back to you as soon as they are verified.")
             return redirect('dashboard')
     else:
         form = UserProfileForm(instance=profile, user=request.user)
@@ -267,8 +276,9 @@ def cancel_transaction(request, transaction_id):
     if request.method == "POST":
         transaction = get_object_or_404(Transaction, transaction_id=transaction_id, user=request.user)
         if transaction.cancel:
-            return HttpResponseForbidden("Transaction already canceled.")
+            return HttpResponseForbidden("Transaction already canceled")
         transaction.cancel = True
         transaction.save()
+        messages.success(request, 'Your deal has been cancelled successfully')
         return redirect('dashboard')
     return HttpResponseForbidden("Invalid request method.")
