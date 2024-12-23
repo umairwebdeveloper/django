@@ -10,6 +10,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.contrib import messages
 from django.http import JsonResponse
 from django.http import HttpResponseForbidden
+from django import forms
 
 
 def login(request):
@@ -312,3 +313,43 @@ def cancel_transaction(request, transaction_id):
         messages.success(request, "Your deal has been cancelled successfully")
         return redirect("dashboard")
     return HttpResponseForbidden("Invalid request method.")
+
+
+class EmailForm(forms.Form):
+    recipient_email = forms.EmailField(
+        label="Recipient Email",
+        widget=forms.EmailInput(
+            attrs={"class": "form-control", "placeholder": "Enter recipient email"}
+        ),
+    )
+
+
+def test_email(request):
+    if request.method == "POST":
+        form = EmailForm(request.POST)
+        if form.is_valid():
+            recipient_email = form.cleaned_data["recipient_email"]
+            subject = "Welcome to KeySavvy! We are your partner in private party vehicle sales."
+            template_path = "emails/status_update_email.html"
+            context = {
+                "user_name": "umair",
+                "status": "approves",
+                "price": 20000,
+            }  # Replace `price` with actual value
+            recipient_list = [recipient_email]
+
+            # Call your email-sending function
+            send_email(subject, recipient_list, template_path, context)
+
+            return render(
+                request,
+                "test_email.html",
+                {
+                    "form": form,
+                    "message": "Email sent successfully!",
+                },
+            )
+    else:
+        form = EmailForm()
+
+    return render(request, "test_email.html", {"form": form})
