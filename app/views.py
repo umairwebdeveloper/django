@@ -20,21 +20,21 @@ def login(request):
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
             user = authenticate(request, username=email, password=password)
-            if user: 
-                auth_login(request, user)  
-                return redirect('dashboard') 
+            if user:
+                auth_login(request, user)
+                return redirect("dashboard")
             else:
                 form.add_error(None, "Invalid email or password")
-            
+
     context = {
         "signin_form": form,
         "errors": form.errors if form.errors else errors,
         "header_color": "background-color: rgb(26, 43, 99) !important",
     }
-    
+
     return render(request, "login.html", context)
 
 
@@ -49,19 +49,19 @@ def register(request, transaction_id):
         raise Http404("Associated email not found for the transaction.")
 
     errors = None
-    if request.method == 'POST':
+    if request.method == "POST":
         form = StartUserForm(request.POST, user_instance=user_instance)
         if form.is_valid():
             try:
                 user = form.save()
-                password = form.cleaned_data['password']
+                password = form.cleaned_data["password"]
                 # Automatically log in the user
                 auth_login(request, user)
 
                 messages.success(request, "User registered and logged in successfully.")
-                subject = 'Welcome to KeySavvy! We are your partner in private party vehicle sales.'
+                subject = "Welcome to KeySavvy! We are your partner in private party vehicle sales."
                 recipient_list = [user.email]
-                template_path = 'emails/wellcome.html'
+                template_path = "emails/wellcome.html"
                 context = {
                     "user_email": user.email,
                     "user_password": password,
@@ -94,86 +94,93 @@ def dashboard(request):
         profile_status = profile.status
     except UserProfile.DoesNotExist:
         profile_status = "pending"
-    
+
     # Retrieve the latest non-canceled transaction for the user
     transaction = Transaction.objects.filter(user=user).last()
     vehicle = transaction.vehicle if transaction else None
     transaction_id = transaction.transaction_id if transaction else None
     transaction_cancel = transaction.cancel if transaction else None
-    faq_data = load_json_file('app/faq_data/dashboard.json')
-    
+    faq_data = load_json_file("app/faq_data/dashboard.json")
+
     context = {
         "user": user,
         "vehicle": vehicle,
         "transaction_id": transaction_id,
         "dashboard": True,
         "from_signup": None,
-        "profile_status": profile_status, 
+        "profile_status": profile_status,
         "transaction_cancel": transaction_cancel,
         "header_color": "background-color: rgb(26, 43, 99) !important",
-        "faq_data": faq_data
+        "faq_data": faq_data,
     }
     return render(request, "dashboard.html", context)
 
+
 def home(request):
-    faq_data = load_json_file('app/faq_data/home.json')
+    faq_data = load_json_file("app/faq_data/home.json")
+    # user = request.user
+    # subject = "Welcome to KeySavvy! We are your partner in private party vehicle sales."
+    # recipient_list = ["umairashraf5252@gmail.com"]
+    # template_path = "emails/status_update_email.html"
+    # context = {"user_name": "umair", "status": "approves", "price": price}
+    # send_email(subject, recipient_list, template_path, context)
     context = {
         "faq_data": faq_data,
-        "header_color": "background-color: rgb(64, 135, 177) !important"
+        "header_color": "background-color: rgb(64, 135, 177) !important",
     }
-    return render(request, 'home.html', context)
+    return render(request, "home.html", context)
+
 
 def works(request):
-    faq_data_1 = load_json_file('app/faq_data/works/general.json')
-    faq_data_2 = load_json_file('app/faq_data/works/buying.json')
-    faq_data_3 = load_json_file('app/faq_data/works/selling.json')
+    faq_data_1 = load_json_file("app/faq_data/works/general.json")
+    faq_data_2 = load_json_file("app/faq_data/works/buying.json")
+    faq_data_3 = load_json_file("app/faq_data/works/selling.json")
     context = {
         "faq_data_1": faq_data_1,
         "faq_data_2": faq_data_2,
         "faq_data_3": faq_data_3,
-        "header_color": "background-color: rgb(26, 43, 99) !important"
+        "header_color": "background-color: rgb(26, 43, 99) !important",
     }
     return render(request, "works.html", context)
 
+
 def buy(request):
-    faq_data = load_json_file('app/faq_data/buy.json')
+    faq_data = load_json_file("app/faq_data/buy.json")
     context = {
         "faq_data": faq_data,
-        "header_color": "background-color: rgb(26, 43, 99) !important"
+        "header_color": "background-color: rgb(26, 43, 99) !important",
     }
     return render(request, "buy.html", context)
 
+
 def sell(request):
-    faq_data = load_json_file('app/faq_data/sell.json')
+    faq_data = load_json_file("app/faq_data/sell.json")
     context = {
         "faq_data": faq_data,
-        "header_color": "background-color: rgb(26, 43, 99) !important"
+        "header_color": "background-color: rgb(26, 43, 99) !important",
     }
     return render(request, "sell.html", context)
 
+
 def blog(request):
-    context = {
-        "header_color": "background-color: rgb(26, 43, 99) !important"
-    }
-    return render(request, 'blog.html', context)
+    context = {"header_color": "background-color: rgb(26, 43, 99) !important"}
+    return render(request, "blog.html", context)
+
 
 def payment(request):
-    context = {
-        "header_color": "background-color: rgb(26, 43, 99) !important"
-    }
-    return render(request, 'payment.html', context)
+    context = {"header_color": "background-color: rgb(26, 43, 99) !important"}
+    return render(request, "payment.html", context)
+
 
 def trust(request):
-    context = {
-        "header_color": "background-color: rgb(26, 43, 99) !important"
-    }
-    return render(request, 'trust.html', context)
+    context = {"header_color": "background-color: rgb(26, 43, 99) !important"}
+    return render(request, "trust.html", context)
+
 
 def contact(request):
-    context = {
-        "header_color": "background-color: rgb(26, 43, 99) !important"
-    }
+    context = {"header_color": "background-color: rgb(26, 43, 99) !important"}
     return render(request, "contact.html", context)
+
 
 @login_required(login_url="auth")
 def add_or_update_profile(request):
@@ -182,38 +189,51 @@ def add_or_update_profile(request):
     except UserProfile.DoesNotExist:
         profile = None
 
-    if request.method == 'POST':
-        form = UserProfileForm(request.POST, request.FILES, instance=profile, user=request.user)
+    if request.method == "POST":
+        form = UserProfileForm(
+            request.POST, request.FILES, instance=profile, user=request.user
+        )
         if form.is_valid():
             user_profile = form.save(commit=False)
             user_profile.user = request.user
             user_profile.save()
-            messages.success(request, "Thank you for submitting your documents. We will get back to you as soon as they are verified.")
-            return redirect('dashboard')
+            messages.success(
+                request,
+                "Thank you for submitting your documents. We will get back to you as soon as they are verified.",
+            )
+            return redirect("dashboard")
     else:
         form = UserProfileForm(instance=profile, user=request.user)
-        
+
     try:
         u_profile = request.user.profile
         profile_status = u_profile.status
     except UserProfile.DoesNotExist:
         profile_status = "pending"
 
-    return render(request, 'profile.html', {'form': form, "profile_status": profile_status, "header_color": "background-color: rgb(26, 43, 99) !important"})
+    return render(
+        request,
+        "profile.html",
+        {
+            "form": form,
+            "profile_status": profile_status,
+            "header_color": "background-color: rgb(26, 43, 99) !important",
+        },
+    )
 
 
 def verify_transaction(request, transaction_id):
     """
-        view to verify the serial number and email from the unique link.
+    view to verify the serial number and email from the unique link.
     """
     transaction = get_object_or_404(Transaction, transaction_id=transaction_id)
-    faq_data = load_json_file('app/faq_data/sell.json')
-    
+    faq_data = load_json_file("app/faq_data/sell.json")
+
     context = {
-        "transaction": transaction,    
+        "transaction": transaction,
         "faq_data": faq_data,
-        "header_color": "background-color: rgb(26, 43, 99) !important"
-     }
+        "header_color": "background-color: rgb(26, 43, 99) !important",
+    }
 
     if request.method == "POST":
         entered_serial = request.POST.get("serial_number")
@@ -224,7 +244,7 @@ def verify_transaction(request, transaction_id):
         else:
             context["error"] = "*Invalid VIN entered"
             return render(request, "verify_transaction.html", context)
-    
+
     return render(request, "verify_transaction.html", context)
 
 
@@ -245,15 +265,22 @@ def vehicle_details(request, transaction_id):
     #     context = {
     #         "user_email": user.email,
     #         "user_name": user.username,
-    #         "user_password": new_password, 
+    #         "user_password": new_password,
     #         "first_name":user.first_name,
     #         "last_name": user.last_name
     #     }
-    #     # send_email(subject, recipient_list, template_path, context) 
+    #     # send_email(subject, recipient_list, template_path, context)
 
     #     return redirect("auth")
 
-    return render(request, "vehicle_details.html", {"transaction": transaction, "header_color": "background-color: rgb(26, 43, 99) !important"})
+    return render(
+        request,
+        "vehicle_details.html",
+        {
+            "transaction": transaction,
+            "header_color": "background-color: rgb(26, 43, 99) !important",
+        },
+    )
 
 
 @login_required
@@ -271,14 +298,17 @@ def update_phone_number(request):
         return JsonResponse({"success": True})
     return JsonResponse({"success": False}, status=400)
 
+
 @login_required
 def cancel_transaction(request, transaction_id):
     if request.method == "POST":
-        transaction = get_object_or_404(Transaction, transaction_id=transaction_id, user=request.user)
+        transaction = get_object_or_404(
+            Transaction, transaction_id=transaction_id, user=request.user
+        )
         if transaction.cancel:
             return HttpResponseForbidden("Transaction already canceled")
         transaction.cancel = True
         transaction.save()
-        messages.success(request, 'Your deal has been cancelled successfully')
-        return redirect('dashboard')
+        messages.success(request, "Your deal has been cancelled successfully")
+        return redirect("dashboard")
     return HttpResponseForbidden("Invalid request method.")
